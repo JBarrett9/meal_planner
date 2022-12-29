@@ -5,6 +5,7 @@ const { createUser } = require("../db/users");
 const { createMeal } = require("../db/meals");
 const { createCategory } = require("../db/categories");
 const { createRecipe } = require("../db/recipes");
+const { createList } = require("../db/lists");
 const { JWT_SECRET } = process.env;
 
 const createTestAccount = async () => {
@@ -74,10 +75,31 @@ const createTestRecipe = async (testUser) => {
   const testRecipe = await createRecipe(testRecipeData);
 
   if (!testRecipe) {
-    throw new Error("testRecipe did not return a recipe");
+    throw new Error("createRecipe did not return a recipe");
   }
 
   return testRecipe;
+};
+
+const createTestList = async (testUser) => {
+  if (!testUser) {
+    testUser = await createTestUser();
+  }
+
+  const testListData = {
+    active: true,
+    accountId: testUser.accountId,
+    userId: testUser.id,
+    created: faker.date.future(1),
+  };
+
+  const testList = await createList(testListData);
+
+  if (!testList) {
+    throw new Error("createList did not return a list");
+  }
+
+  return testList;
 };
 
 const createTestCategory = async () => {
@@ -95,5 +117,6 @@ module.exports = {
   createTestUser,
   createTestMeal,
   createTestRecipe,
+  createTestList,
   createTestCategory,
 };

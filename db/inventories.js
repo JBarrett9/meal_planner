@@ -4,7 +4,7 @@ const createInventory = async (accountId) => {
   try {
     const {
       rows: [inventory],
-    } = client.query(
+    } = await client.query(
       `INSERT INTO inventories("accountId") VALUES ($1) RETURNING *;`,
       [accountId]
     );
@@ -19,13 +19,11 @@ const getInventory = async (accountId) => {
   try {
     const {
       rows: [inventory],
-    } = client.query(`SELECT * FROM inventories WHERE "accountId"=$1;`, [
+    } = await client.query(`SELECT * FROM inventories WHERE "accountId"=$1;`, [
       accountId,
     ]);
 
-    const {
-      rows: [ingredients],
-    } = await client.query(
+    const { rows: ingredients } = await client.query(
       `SELECT * FROM ingredients 
             JOIN inventory_ingredients ON inventory_ingredients."ingredientId"=ingredients.id 
             WHERE inventory_ingredients."inventoryId"=${inventory.id};`

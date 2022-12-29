@@ -76,7 +76,7 @@ const getRecipe = async (id) => {
 
     let { rows: categories } = await client.query(
       `SELECT * FROM categories 
-        JOIN recipe_categories ON recipe_categories."catgoryId"=categories.id 
+        JOIN recipe_categories ON recipe_categories."categoryId"=categories.id 
         WHERE recipe_categories."recipeId"=${recipe.id};`
     );
 
@@ -89,7 +89,7 @@ const getRecipe = async (id) => {
   }
 };
 
-const getRecipesByCategory = async (categoryId) => {
+const getRecipesByCategory = async (categoryId, accountId) => {
   try {
     const { rows: recipes } = await client.query(
       `SELECT * FROM recipes JOIN recipe_categories ON recipe_categories."recipeId"=recipes.id 
@@ -106,7 +106,7 @@ const getRecipesByCategory = async (categoryId) => {
 
       let { rows: categories } = await client.query(
         `SELECT * FROM categories 
-        JOIN recipe_categories ON recipe_categories."catgoryId"=categories.id 
+        JOIN recipe_categories ON recipe_categories."categoryId"=categories.id 
         WHERE recipe_categories."recipeId"=${recipe.id};`
       );
 

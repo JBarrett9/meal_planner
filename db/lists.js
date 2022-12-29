@@ -4,7 +4,7 @@ const createList = async ({ active, accountId, userId, created }) => {
   try {
     const {
       rows: [list],
-    } = client.query(
+    } = await client.query(
       `INSERT INTO lists(active, "accountId", "creatorId", created) 
         VALUES ($1, $2, $3, $4) 
         RETURNING *;`,
@@ -21,11 +21,9 @@ const getList = async (id) => {
   try {
     const {
       rows: [list],
-    } = client.query(`SELECT * FROM lists WHERE id=$1;`, [id]);
+    } = await client.query(`SELECT * FROM lists WHERE id=$1;`, [id]);
 
-    const {
-      rows: [ingredients],
-    } = await client.query(
+    const { rows: ingredients } = await client.query(
       `SELECT * FROM ingredients 
       JOIN list_ingredients ON list_ingredients."ingredientId"=ingredients.id 
       WHERE list_ingredients."listId"=${list.id};`
@@ -41,15 +39,13 @@ const getList = async (id) => {
 
 const getListsByAccountId = async (accountId) => {
   try {
-    const { rows: lists } = client.query(
+    const { rows: lists } = await client.query(
       `SELECT * FROM lists WHERE "accountId"=$1;`,
       [accountId]
     );
 
     for (let list of lists) {
-      let {
-        rows: [ingredients],
-      } = await client.query(
+      let { rows: ingredients } = await client.query(
         `SELECT * FROM ingredients 
             JOIN list_ingredients ON list_ingredients."ingredientId"=ingredients.id 
             WHERE list_ingredients."listId"=${list.id};`
@@ -66,15 +62,13 @@ const getListsByAccountId = async (accountId) => {
 
 const getListsByUserId = async (userId) => {
   try {
-    const { rows: lists } = client.query(
+    const { rows: lists } = await client.query(
       `SELECT * FROM lists WHERE "creatorId"=$1;`,
       [userId]
     );
 
     for (let list of lists) {
-      let {
-        rows: [ingredients],
-      } = await client.query(
+      let { rows: ingredients } = await client.query(
         `SELECT * FROM ingredients 
             JOIN list_ingredients ON list_ingredients."ingredientId"=ingredients.id 
             WHERE list_ingredients."listId"=${list.id};`
@@ -91,15 +85,13 @@ const getListsByUserId = async (userId) => {
 
 const getAccountActiveLists = async (accountId) => {
   try {
-    const { rows: lists } = client.query(
+    const { rows: lists } = await client.query(
       `SELECT * FROM lists WHERE "accountId"=$1 AND active=true;`,
-      [userId]
+      [accountId]
     );
 
     for (let list of lists) {
-      let {
-        rows: [ingredients],
-      } = await client.query(
+      let { rows: ingredients } = await client.query(
         `SELECT * FROM ingredients 
             JOIN list_ingredients ON list_ingredients."ingredientId"=ingredients.id 
             WHERE list_ingredients."listId"=${list.id};`

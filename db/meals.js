@@ -105,8 +105,6 @@ const getUserMeals = async (userId) => {
       [userId]
     );
 
-    console.log(meals);
-
     for (let meal of meals) {
       let { rows: recipes } = await client.query(
         `SELECT * FROM recipes 
