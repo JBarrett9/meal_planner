@@ -117,7 +117,7 @@ const createTables = async () => {
         id SERIAL PRIMARY KEY,
         "listId" INTEGER REFERENCES lists(id),
         "ingredientId" INTEGER REFERENCES ingredients(id),
-        qty INTEGER,
+        qty FLOAT,
         unit VARCHAR(255)
     );`);
 
@@ -126,7 +126,7 @@ const createTables = async () => {
         id SERIAL PRIMARY KEY,
         "inventoryId" INTEGER REFERENCES inventories(id),
         "ingredientId" INTEGER REFERENCES ingredients(id),
-        qty INTEGER,
+        qty FLOAT,
         unit VARCHAR(255)
     );`);
 
@@ -135,7 +135,7 @@ const createTables = async () => {
         id SERIAL PRIMARY KEY,
         "recipeId" INTEGER REFERENCES recipes(id),
         "ingredientId" INTEGER REFERENCES ingredients(id),
-        qty DECIMAL(2),
+        qty FLOAT,
         unit VARCHAR(255)
     );`);
 

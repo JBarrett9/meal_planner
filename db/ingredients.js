@@ -1,3 +1,5 @@
+const client = require("./client");
+
 const addIngredientToInventory = async ({
   inventoryId,
   ingredientId,

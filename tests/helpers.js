@@ -6,6 +6,7 @@ const { createMeal } = require("../db/meals");
 const { createCategory } = require("../db/categories");
 const { createRecipe } = require("../db/recipes");
 const { createList } = require("../db/lists");
+const { createIngredient } = require("../db/ingredients");
 const { JWT_SECRET } = process.env;
 
 const createTestAccount = async () => {
@@ -112,6 +113,23 @@ const createTestCategory = async () => {
   return testCategory;
 };
 
+const createTestIngredient = async () => {
+  const testIngredientData = {
+    name: faker.commerce.product(),
+    conversion: faker.random.numeric(3),
+    calories: faker.random.numeric(3),
+    type: faker.commerce.department(),
+    nutrition: faker.lorem.lines(5),
+  };
+  const testIngredient = await createIngredient(testIngredientData);
+
+  if (!testIngredient) {
+    throw new Error("createIngredient did not return an ingredient");
+  }
+
+  return testIngredient;
+};
+
 module.exports = {
   createTestAccount,
   createTestUser,
@@ -119,4 +137,5 @@ module.exports = {
   createTestRecipe,
   createTestList,
   createTestCategory,
+  createTestIngredient,
 };
