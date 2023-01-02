@@ -1,4 +1,6 @@
 const request = require("supertest");
+const { faker } = require("@faker-js/faker");
+const app = require("../../app");
 
 describe("/api/users", () => {
   describe("POST /api/users/register", () => {
@@ -11,7 +13,9 @@ describe("/api/users", () => {
 
       const response = await request(app)
         .post("/api/users/register")
-        .send(testUserData);
+        .send(testUserData)
+        .expect("Content-Type", /json/)
+        .expect(200);
     });
   });
 });
