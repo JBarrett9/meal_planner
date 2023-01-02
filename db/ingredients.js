@@ -62,15 +62,16 @@ const createIngredient = async ({
   calories,
   type,
   nutrition,
+  creatorId,
 }) => {
   try {
     const {
       rows: [ingredient],
     } = await client.query(
-      `INSERT INTO ingredients (name, conversion, calories, type, nutrition)
-            VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO ingredients (name, conversion, calories, type, nutrition, "creatorId")
+            VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING *;`,
-      [name, conversion, calories, type, nutrition]
+      [name, conversion, calories, type, nutrition, creatorId]
     );
 
     return ingredient;

@@ -6,6 +6,7 @@ const {
   addIngredientToRecipe,
   deleteIngredient,
   getAllIngredients,
+  getIngredientById,
 } = require("../../db/ingredients");
 const { createInventory, getInventory } = require("../../db/inventories");
 const { getList } = require("../../db/lists");
@@ -128,12 +129,14 @@ describe("DB ingredients", () => {
 
   describe("createIngredient", () => {
     it("Creates an ingredient", async () => {
+      const testUser = await createTestUser();
       const ingredientData = {
         name: "onion",
         conversion: 101,
         calories: 16,
         type: "vegetable",
         nutrition: "lorem ipsum",
+        creatorId: testUser.id,
       };
 
       const ingredient = await createIngredient(ingredientData);
@@ -182,7 +185,18 @@ describe("DB ingredients", () => {
     });
   });
 
-  describe("getIngredientById", () => {});
+  describe("getIngredientById", () => {
+    it("Returns the ingredient for the given id", async () => {
+      const testIngredientData = await createTestIngredient();
+      const testIngredient = await getIngredientById(testIngredientData.id);
+
+      expect(testIngredient.name).toEqual(testIngredientData.name);
+      expect(testIngredient.conversion).toEqual(testIngredientData.conversion);
+      expect(testIngredient.calories).toEqual(testIngredientData.calories);
+      expect(testIngredient.type).toEqual(testIngredientData.type);
+      expect(testIngredient.nutrition).toEqual(testIngredientData.nutrition);
+    });
+  });
 
   describe("removeIngredientFromInventory", () => {});
 

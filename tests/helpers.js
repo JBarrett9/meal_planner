@@ -114,12 +114,14 @@ const createTestCategory = async () => {
 };
 
 const createTestIngredient = async () => {
+  const user = await createTestUser();
   const testIngredientData = {
     name: faker.commerce.product(),
     conversion: faker.random.numeric(3),
     calories: faker.random.numeric(3),
     type: faker.commerce.department(),
     nutrition: faker.lorem.lines(5),
+    creatorId: user.id,
   };
   const testIngredient = await createIngredient(testIngredientData);
 

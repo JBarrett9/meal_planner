@@ -13,6 +13,8 @@ const {
   updateUser,
   getAllUsers,
 } = require("../db/users");
+const { createAccount } = require("../db/accounts");
+const { createInventory } = require("../db/inventories");
 
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
@@ -55,7 +57,7 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.post("/register", async (req, res, next) => {
-  const { email, password, name } = req.body;
+  const { email, password, name, accountId } = req.body;
   const _user = await getUserByEmail(email);
   if (_user) {
     next({
@@ -75,7 +77,15 @@ router.post("/register", async (req, res, next) => {
   }
 
   try {
-    await createUser({ email, name, password });
+    if (!accountId) {
+      const { id } = await createAccount(name);
+      accountId = id;
+      primaryUser = true;
+    } else {
+      primaryUser = false;
+    }
+    await createUser({ email, name, password, accountId, primaryUser });
+    await createInventory(accountId);
     const user = await getUserByEmail(email);
     let userData = {
       id: user.id,

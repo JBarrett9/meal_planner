@@ -37,14 +37,6 @@ const createTables = async () => {
   try {
     console.log("-- Creating Tables --");
     console.log("Creating ingredients table ...");
-    await client.query(`CREATE TABLE ingredients(
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(255),
-            conversion INTEGER,
-            calories INTEGER,
-            type VARCHAR(255),
-            nutrition TEXT
-        );`);
 
     console.log("Creating table accounts ...");
     await client.query(`CREATE TABLE accounts(
@@ -62,6 +54,16 @@ const createTables = async () => {
             "primaryUser" BOOLEAN,
             admin BOOLEAN DEFAULT false
         );`);
+
+    await client.query(`CREATE TABLE ingredients(
+          id SERIAL PRIMARY KEY,
+          name VARCHAR(255),
+          conversion INTEGER,
+          calories INTEGER,
+          type VARCHAR(255),
+          nutrition TEXT,
+          "creatorId" INTEGER REFERENCES users(id) 
+      );`);
 
     console.log("Creating table meals ...");
     await client.query(`CREATE TABLE meals(

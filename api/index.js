@@ -39,6 +39,14 @@ router.get("/health", async (req, res, next) => {
   }
 });
 
+const ingredientsRouter = require("./ingredients");
+const inventoriesRouter = require("./inventories");
+const usersRouter = require("./users");
+
+router.use("/ingredients", ingredientsRouter);
+router.use("/inventories", inventoriesRouter);
+router.use("/users", usersRouter);
+
 router.use("*", (req, res) => {
   res.status(404);
   res.send({
