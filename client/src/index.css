@@ -18,6 +18,11 @@ body {
   padding: 0;
   font-size: 1.6rem;
   font-family: "Varela Round", sans-serif;
+  background-image: url("./images/herringbone.webp");
+}
+
+.hidden {
+  display: none;
 }
 
 .material-symbols-outlined {

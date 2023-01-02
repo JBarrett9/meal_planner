@@ -1,13 +1,15 @@
 import { Link } from "react-router-dom";
 import "./navbar.css";
-const Navbar = () => {
+const Navbar = (props) => {
   return (
-    <nav className="navbar">
+    <header className="navbar">
       <Link to="/">
         <div className="logo" />
       </Link>
-      <span className="material-symbols-outlined menu-icon">menu</span>
-    </nav>
+      <button onClick={() => props.setMenuOpen(!props.menuOpen)}>
+        <span className="material-symbols-outlined menu-icon">menu</span>
+      </button>
+    </header>
   );
 };
 
