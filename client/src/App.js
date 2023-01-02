@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { getUser } from "./api/authentication";
 import Home from "./components/home/home";
+import Navbar from "./components/navbar/navbar";
 import Login from "./components/user/login";
 import Register from "./components/user/register";
 
@@ -23,11 +24,14 @@ function App() {
     }
   }, []);
   return (
-    <Routes>
-      <Route path="/" element={<Home />}></Route>
-      <Route path="/login" element={<Login />}></Route>
-      <Route path="/register" element={<Register />}></Route>
-    </Routes>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route path="/register" element={<Register />}></Route>
+      </Routes>
+    </>
   );
 }
 

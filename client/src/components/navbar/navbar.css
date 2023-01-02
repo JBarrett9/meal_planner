@@ -1,0 +1,28 @@
+.logo {
+  background-color: white;
+  width: 14rem;
+  height: 14rem;
+  border-radius: 50%;
+  margin-left: -2rem;
+  margin-top: -2rem;
+  box-shadow: 0.4rem 0.4rem 1.2rem #222;
+}
+
+.menu-icon {
+  color: white;
+  float: right;
+  font-size: 5.4rem;
+  margin-right: 4rem;
+  border: 0.3rem solid white;
+  border-radius: 1.5rem;
+}
+
+.navbar {
+  z-index: 1;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
