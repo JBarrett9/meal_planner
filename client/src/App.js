@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
+import { getUser } from "./api/authentication";
 import Home from "./components/home/home";
+import Login from "./components/user/login";
+import Register from "./components/user/register";
 
 function App() {
   const [account, setAccount] = useState({});
@@ -7,13 +11,24 @@ function App() {
   const [token, setToken] = useState("");
 
   useEffect(() => {
-    const localStorageToken = localStorage.getItem("token");
+    const storedToken = localStorage.getItem("jwt");
 
     async function getMe() {
-      setToken(localStorageToken);
+      const me = await getUser(storedToken);
+      setUser(me);
     }
-  });
-  return <div className="App"></div>;
+    if (storedToken) {
+      setToken(storedToken);
+      getMe();
+    }
+  }, []);
+  return (
+    <Routes>
+      <Route path="/" element={<Home />}></Route>
+      <Route path="/login" element={<Login />}></Route>
+      <Route path="/register" element={<Register />}></Route>
+    </Routes>
+  );
 }
 
 export default App;

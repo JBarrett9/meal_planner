@@ -1,0 +1,22 @@
+.form-sec {
+  margin-top: 1rem;
+  display: flex;
+}
+
+.login-form {
+  background-color: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 34rem;
+  margin-top: 10rem;
+  padding: 0 2rem 2rem 2rem;
+}
+
+.login-form label {
+  margin-right: 1rem;
+}
+
+.login-form input {
+  flex-basis: 100%;
+}

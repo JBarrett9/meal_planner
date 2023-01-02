@@ -1,3 +1,11 @@
+:root {
+  --color-bg: #f1faee;
+  --c1: #e63946;
+  --c2: #a8dadc;
+  --c3: #457b9d;
+  --c4: #1d3557;
+}
+
 html {
   font-size: 62.5%;
 }
