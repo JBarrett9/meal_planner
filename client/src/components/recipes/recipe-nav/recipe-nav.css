@@ -1,0 +1,17 @@
+.recipe-nav {
+    background-color: white;
+    margin-top: 16rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+.recipe-nav-sec {
+    width: 26rem;
+    margin-bottom: 1rem;
+}
+
+.recipe-nav-sec label {
+    margin-right: 0.4rem;
+}

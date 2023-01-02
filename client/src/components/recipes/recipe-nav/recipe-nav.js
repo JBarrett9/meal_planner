@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
+import "./recipe-nav.css";
 
 const RecipeNav = () => {
   return (
-    <nav>
-      <span>
+    <nav className="recipe-nav">
+      <span className="recipe-nav-sec">
         <label>Search: </label>
         <input />
       </span>
-      <span>
+      <span className="recipe-nav-sec">
         <label>Category:</label>
         <select name="sortBy" id="sortBy">
           <option disabled value={-1}>
@@ -16,7 +17,9 @@ const RecipeNav = () => {
           </option>
         </select>
       </span>
-      <Link to="/recipe_form">+ Add a Recipe</Link>
+      <span className="recipe-nav-sec">
+        <Link to="/recipe_form">+ Add a Recipe</Link>
+      </span>
     </nav>
   );
 };
