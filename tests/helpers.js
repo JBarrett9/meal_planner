@@ -38,6 +38,14 @@ const createTestUser = async () => {
   return testUser;
 };
 
+const createTestUserWithToken = async () => {
+  const user = await createTestUser();
+
+  const token = jwt.sign(user, JWT_SECRET);
+
+  return { user, token };
+};
+
 const createTestMeal = async (testUser) => {
   if (!testUser) {
     testUser = await createTestUser();
@@ -140,4 +148,5 @@ module.exports = {
   createTestList,
   createTestCategory,
   createTestIngredient,
+  createTestUserWithToken,
 };

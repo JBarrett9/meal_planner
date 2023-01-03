@@ -14,7 +14,7 @@ const {
   getAllUsers,
 } = require("../db/users");
 const { createAccount } = require("../db/accounts");
-const { createInventory } = require("../db/inventories");
+const { createInventory, getInventory } = require("../db/inventories");
 
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
@@ -37,6 +37,8 @@ router.post("/login", async (req, res, next) => {
           email: user.email,
           name: user.name,
           admin: user.admin,
+          accountId: user.accountId,
+          primaryUser: user.primaryUser,
         };
         res.send({
           user: userData,
@@ -57,7 +59,7 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.post("/register", async (req, res, next) => {
-  const { email, password, name, accountId } = req.body;
+  let { email, password, name, accountId } = req.body;
   const _user = await getUserByEmail(email);
   if (_user) {
     next({
@@ -78,25 +80,25 @@ router.post("/register", async (req, res, next) => {
 
   try {
     if (!accountId) {
-      const { id } = await createAccount(name);
-      accountId = id;
+      const account = await createAccount(name);
+      accountId = account.id;
       primaryUser = true;
     } else {
       primaryUser = false;
     }
-    await createUser({ email, name, password, accountId, primaryUser });
+    const user = await createUser({
+      email,
+      name,
+      password,
+      accountId,
+      primaryUser,
+    });
     await createInventory(accountId);
-    const user = await getUserByEmail(email);
-    let userData = {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      admin: user.admin,
-    };
+
     let token = jwt.sign(user, JWT_SECRET);
 
     res.send({
-      user: userData,
+      user,
       message: "you're logged in!",
       token,
     });
@@ -105,7 +107,7 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-router.patch("/admin/:userId", requireAdmin, async (req, res, next) => {
+router.patch("/admin/user/:userId", requireAdmin, async (req, res, next) => {
   const { userId } = req.params;
   const { name, password, admin } = req.body;
   let updateFields = { name, password, admin };
