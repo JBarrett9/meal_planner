@@ -98,11 +98,11 @@ const createTables = async () => {
     console.log("Creating table recipes ...");
     await client.query(`CREATE TABLE recipes(
         id SERIAL PRIMARY KEY,
+        name VARCHAR(255),
         steps TEXT,
         description TEXT,
         "accountId" INTEGER REFERENCES accounts(id),
         "creatorId" INTEGER REFERENCES users(id),
-        url VARCHAR(255),
         source VARCHAR(255),
         public BOOLEAN DEFAULT false
     );`);
@@ -138,7 +138,8 @@ const createTables = async () => {
         "recipeId" INTEGER REFERENCES recipes(id),
         "ingredientId" INTEGER REFERENCES ingredients(id),
         qty FLOAT,
-        unit VARCHAR(255)
+        unit VARCHAR(255),
+        position INTEGER
     );`);
 
     console.log("Creating table recipe_categories ...");
@@ -243,7 +244,6 @@ const populate = async () => {
     description: "",
     accountId: account.id,
     userId: user.id,
-    url: "",
     source: "",
     public: false,
   });
@@ -253,6 +253,7 @@ const populate = async () => {
     ingredientId: potato.id,
     qty: 4,
     unit: "medium potato",
+    order: 1,
   });
 
   addIngredientToRecipe({
@@ -260,6 +261,7 @@ const populate = async () => {
     ingredientId: onion.id,
     qty: 1,
     unit: "medium onion",
+    order: 2,
   });
 
   addIngredientToRecipe({
@@ -267,6 +269,7 @@ const populate = async () => {
     ingredientId: butter.id,
     qty: 3,
     unit: "tbsp",
+    order: 3,
   });
 
   addIngredientToRecipe({
@@ -274,6 +277,7 @@ const populate = async () => {
     ingredientId: flour.id,
     qty: 3,
     unit: "tbsp",
+    order: 4,
   });
 
   addIngredientToRecipe({
@@ -281,6 +285,7 @@ const populate = async () => {
     ingredientId: butter.id,
     qty: 0.5,
     unit: "tsp",
+    order: 5,
   });
 
   addIngredientToRecipe({
@@ -288,6 +293,7 @@ const populate = async () => {
     ingredientId: milk.id,
     qty: 2,
     unit: "cup",
+    order: 6,
   });
 
   addIngredientToRecipe({
@@ -295,6 +301,7 @@ const populate = async () => {
     ingredientId: cheese.id,
     qty: 1.5,
     unit: "cup",
+    order: 7,
   });
 
   const list = await createList({
@@ -358,6 +365,7 @@ const rebuildDB = async () => {
   try {
     await dropTables();
     await createTables();
+    await populate();
   } catch (error) {
     console.error(error);
   }

@@ -43,6 +43,7 @@ router.post("/login", async (req, res, next) => {
         res.send({
           user: userData,
           message: "Login succeeded",
+          success: true,
           token,
         });
       }
@@ -99,7 +100,8 @@ router.post("/register", async (req, res, next) => {
 
     res.send({
       user,
-      message: "you're logged in!",
+      message: "User successfully registered",
+      success: true,
       token,
     });
   } catch (error) {
@@ -172,8 +174,12 @@ router.patch("/:userId", requireUser, async (req, res, next) => {
 });
 
 router.get("/me", requireUser, async (req, res) => {
-  const user = req.user;
-  res.send(user);
+  try {
+    const user = req.user;
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get("/all", async (req, res, next) => {

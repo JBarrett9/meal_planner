@@ -39,15 +39,21 @@ const addIngredientToList = async ({ listId, ingredientId, qty, unit }) => {
   }
 };
 
-const addIngredientToRecipe = async ({ recipeId, ingredientId, qty, unit }) => {
+const addIngredientToRecipe = async ({
+  recipeId,
+  ingredientId,
+  qty,
+  unit,
+  order,
+}) => {
   try {
     const {
       rows: [recipeIngredient],
     } = await client.query(
-      `INSERT INTO recipe_ingredients("recipeId", "ingredientId", qty, unit) 
-        VALUES ($1, $2, $3, $4) 
+      `INSERT INTO recipe_ingredients("recipeId", "ingredientId", qty, unit, position) 
+        VALUES ($1, $2, $3, $4, $5) 
         RETURNING *;`,
-      [recipeId, ingredientId, qty, unit]
+      [recipeId, ingredientId, qty, unit, order]
     );
 
     return recipeIngredient;

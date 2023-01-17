@@ -1,4 +1,5 @@
 import Recipes from "./recipes";
-import RecipeNav from "./recipe-nav/recipe-nav";
+import RecipeForm from "./recipe-form/recipe-form";
+import RecipeNav from "./recipe-navs/recipe-list-nav";
 
-export { RecipeNav, Recipes };
+export { Recipes, RecipeForm, RecipeNav };

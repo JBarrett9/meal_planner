@@ -21,8 +21,7 @@ describe("DB recipes", () => {
         description: faker.lorem.paragraph(),
         accountId: testUser.accountId,
         userId: testUser.id,
-        url: faker.internet.url(),
-        source: "website",
+        source: faker.internet.url(),
         pub: false,
       };
 
@@ -33,7 +32,6 @@ describe("DB recipes", () => {
       expect(testRecipe.description).toEqual(testRecipeData.description);
       expect(testRecipe.accountId).toEqual(testRecipeData.accountId);
       expect(testRecipe.creatorId).toEqual(testRecipeData.userId);
-      expect(testRecipe.url).toEqual(testRecipeData.url);
       expect(testRecipe.source).toEqual(testRecipeData.source);
       expect(testRecipe.public).toEqual(testRecipeData.pub);
     });
@@ -60,7 +58,6 @@ describe("DB recipes", () => {
       expect(testRecipe.description).toEqual(testRecipeData.description);
       expect(testRecipe.accountId).toEqual(testRecipeData.accountId);
       expect(testRecipe.creatorId).toEqual(testRecipeData.creatorId);
-      expect(testRecipe.url).toEqual(testRecipeData.url);
       expect(testRecipe.source).toEqual(testRecipeData.source);
       expect(testRecipe.public).toEqual(testRecipeData.public);
     });
@@ -75,7 +72,6 @@ describe("DB recipes", () => {
       expect(testRecipe.description).toEqual(testRecipeData.description);
       expect(testRecipe.accountId).toEqual(testRecipeData.accountId);
       expect(testRecipe.creatorId).toEqual(testRecipeData.creatorId);
-      expect(testRecipe.url).toEqual(testRecipeData.url);
       expect(testRecipe.source).toEqual(testRecipeData.source);
       expect(testRecipe.public).toEqual(testRecipeData.public);
     });
@@ -119,7 +115,6 @@ describe("DB recipes", () => {
       expect(testRecipe.description).toEqual(testRecipeData.description);
       expect(testRecipe.accountId).toEqual(testRecipeData.accountId);
       expect(testRecipe.creatorId).toEqual(testRecipeData.creatorId);
-      expect(testRecipe.url).toEqual(testRecipeData.url);
       expect(testRecipe.source).toEqual(testRecipeData.source);
       expect(testRecipe.public).toEqual(testRecipeData.public);
     });

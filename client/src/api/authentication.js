@@ -16,7 +16,7 @@ const getUser = async (token) => {
 
 const login = async ({ email, password }) => {
   try {
-    const response = await fetch(url, {
+    const response = await fetch(`/api/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +36,7 @@ const login = async ({ email, password }) => {
 
 const register = async ({ email, password, name }) => {
   try {
-    const response = await fetch(url, {
+    const response = await fetch(`/api/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -57,7 +57,7 @@ const register = async ({ email, password, name }) => {
 
 const registerToAccount = async ({ email, password, name, accountId }) => {
   try {
-    const response = await fetch(url, {
+    const response = await fetch(`/api/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

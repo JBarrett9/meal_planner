@@ -76,8 +76,7 @@ const createTestRecipe = async (testUser) => {
     description: faker.lorem.paragraph(),
     accountId: testUser.accountId,
     userId: testUser.id,
-    url: faker.internet.url(),
-    source: "website",
+    source: faker.internet.url(),
     pub: false,
   };
 

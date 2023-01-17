@@ -1,0 +1,119 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createRecipe } from "../../../api/recipes";
+import { Form, FormInput, FormList } from "../../inputs";
+import CategoryQuery from "../../inputs/category-query/category-query";
+import IngredientQuery from "../../inputs/ingredient-query/ingredient-query";
+
+const RecipeForm = (props) => {
+  const [name, setName] = useState("");
+  const [steps, setSteps] = useState([]);
+  const [step, setStep] = useState("");
+  const [description, setDescription] = useState([]);
+  const [source, setSource] = useState("");
+  const [ingredients, setIngredients] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [makePublic, setMakePublic] = useState(false);
+  const navigate = useNavigate();
+
+  const addStep = (e) => {
+    e.preventDefault();
+    setSteps([...steps, step]);
+    setStep("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const recipe = await createRecipe({
+      token: props.token,
+      name,
+      steps: steps.toString(),
+      description,
+      source,
+      pub: makePublic,
+    });
+
+    for (let ingredient of ingredients) {
+      console.log(ingredient);
+    }
+
+    for (let category of categories) {
+      console.log(category);
+    }
+
+    if (recipe.id) {
+      navigate("/recipes");
+    }
+  };
+
+  return (
+    <Form title="New Recipe">
+      <FormInput
+        label="Title: "
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <FormInput
+        label="Reference: "
+        type="text"
+        value={source}
+        onChange={(e) => setSource(e.target.value)}
+      />
+      <span className="flex flex-col mt-4">
+        <label>Description: </label>
+        <textarea
+          value={description}
+          className="border border-black text-black px-2 py-2 h-24"
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </span>
+      <span className="mt-4">
+        <label>Ingredients: </label>
+        <FormList items={ingredients} setItems={setIngredients} />
+        <IngredientQuery
+          ingredients={ingredients}
+          setIngredients={setIngredients}
+          token={props.token}
+        />
+      </span>
+      <span className="mt-4">
+        <label>Steps: </label>
+        <FormList items={steps} setItems={setSteps} />
+      </span>
+      <span className="flex mt-4">
+        <input
+          type="text"
+          value={step}
+          onChange={(e) => setStep(e.target.value)}
+          className="grow border border-black text-black pl-2"
+        />
+        <button
+          className="ml-4 bg-sky-100 dark:bg-teal-600 px-2 border border-black font-semibold text-xl"
+          onClick={(e) => addStep(e)}
+        >
+          +
+        </button>
+      </span>
+      <label className="mt-4">Categories: </label>
+      <CategoryQuery categories={categories} setCategories={setCategories} />
+      <span className="mt-4 flex justify-center items-center">
+        <label className="mr-2">Make Public? </label>
+        <input
+          checked={makePublic}
+          onChange={() => setMakePublic(!makePublic)}
+          type="checkbox"
+          className="h-5 w-5"
+        />
+      </span>
+      <button
+        onClick={(e) => handleSubmit(e)}
+        className="mt-6 mb-4 py-2 bg-sky-100 dark:bg-teal-600 px-2 border border-black font-semibold text-xl"
+      >
+        Save
+      </button>
+    </Form>
+  );
+};
+
+export default RecipeForm;

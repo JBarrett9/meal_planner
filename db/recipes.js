@@ -1,11 +1,11 @@
 const client = require("./client");
 
 const createRecipe = async ({
+  name,
   steps,
   description,
   accountId,
   userId,
-  url,
   source,
   pub,
 }) => {
@@ -13,10 +13,10 @@ const createRecipe = async ({
     const {
       rows: [recipe],
     } = await client.query(
-      `INSERT INTO recipes(steps, description, "accountId", "creatorId", url, source, public) 
+      `INSERT INTO recipes(name, steps, description, "accountId", "creatorId", source, public) 
       VALUES ($1, $2, $3, $4, $5, $6, $7) 
       RETURNING *;`,
-      [steps, description, accountId, userId, url, source, pub]
+      [name, steps, description, accountId, userId, source, pub]
     );
 
     return recipe;

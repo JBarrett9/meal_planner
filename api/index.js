@@ -39,12 +39,20 @@ router.get("/health", async (req, res, next) => {
   }
 });
 
+const categoriesRouter = require("./categories");
 const ingredientsRouter = require("./ingredients");
 const inventoriesRouter = require("./inventories");
+const listsRouter = require("./lists");
+const mealsRouter = require("./meals");
+const recipesRouter = require("./recipes");
 const usersRouter = require("./users");
 
+router.use("/categories", categoriesRouter);
 router.use("/ingredients", ingredientsRouter);
 router.use("/inventories", inventoriesRouter);
+router.use("/lists", listsRouter);
+router.use("/meals", mealsRouter);
+router.use("/recipesRouter", recipesRouter);
 router.use("/users", usersRouter);
 
 router.use("*", (req, res) => {
@@ -57,7 +65,6 @@ router.use("*", (req, res) => {
 
 router.use((error, req, res, next) => {
   res.status(500).send({
-    error: true,
     name: error.name,
     message: error.message,
   });
@@ -65,7 +72,6 @@ router.use((error, req, res, next) => {
 
 router.use((error, req, res, next) => {
   res.send({
-    error: true,
     name: error.name,
     message: error.message,
   });

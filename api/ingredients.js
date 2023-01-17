@@ -1,4 +1,3 @@
-require("dotenv").config();
 const express = require("express");
 const {
   getAllIngredients,
@@ -8,16 +7,20 @@ const {
 const router = express.Router();
 const { requireUser } = require("./utils");
 
-router.get("/", async (req, res, next) => {
+router.get("/query", async (req, res, next) => {
   try {
-    const ingredients = await getAllIngredients();
+    const qs = req.query.search;
+    const allIngredients = await getAllIngredients();
+    const ingredients = allIngredients.filter((ingredient) =>
+      ingredient.name.includes(qs.toLowerCase())
+    );
     res.send(ingredients);
   } catch (error) {
     next(error);
   }
 });
 
-router.get("/:ingredientId", async (req, res, next) => {
+router.get("/ingredient/:ingredientId", async (req, res, next) => {
   const { ingredientId } = req.params;
   try {
     const ingredient = await getIngredientById(ingredientId);
@@ -28,7 +31,8 @@ router.get("/:ingredientId", async (req, res, next) => {
 });
 
 router.post("/", requireUser, async (req, res, next) => {
-  const { name, conversion, calories, type, nutrition, creatorId } = req.body;
+  const { id: creatorId } = req.user;
+  const { name, conversion, calories, type, nutrition } = req.body;
   try {
     const ingredient = await createIngredient({
       name,
