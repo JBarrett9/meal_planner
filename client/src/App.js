@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { getUser } from "./api/authentication";
+import { Dashboard } from "./components/admin";
 import Footer from "./components/footer/footer";
 import Home from "./components/home/home";
 import Menu from "./components/navbar/menu";
@@ -43,7 +44,12 @@ function App() {
       <div className="mb-16">
         <div ref={wrapperRef}>
           <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} token={token} />
-          <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} logout={logout} />
+          <Menu
+            menuOpen={menuOpen}
+            setMenuOpen={setMenuOpen}
+            user={user}
+            logout={logout}
+          />
         </div>
         <Routes>
           <Route path="/" element={<Home />}></Route>
@@ -61,6 +67,11 @@ function App() {
             path="/recipes/*"
             element={<Recipes user={user} token={token} />}
           ></Route>
+          {user.admin ? (
+            <Route path="/admin/*" element={<Dashboard user={user} />}></Route>
+          ) : (
+            <></>
+          )}
         </Routes>
       </div>
       <Footer />

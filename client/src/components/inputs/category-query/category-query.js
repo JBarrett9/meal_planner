@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getCategoriesByQuery } from "../../../api/categories";
+import { createCategory, getCategoriesByQuery } from "../../../api/categories";
 
 const CategoryQuery = (props) => {
   const [queriedCategories, setQueriedCategories] = useState([]);
@@ -19,6 +19,15 @@ const CategoryQuery = (props) => {
     setCategorySearch("");
   };
 
+  const addNewCategory = async (e) => {
+    e.preventDefault();
+    const newCategory = await createCategory({
+      token: props.token,
+      name: categorySearch,
+    });
+    handleSubmit(newCategory);
+  };
+
   return (
     <span className="">
       <span className="flex mt-4">
@@ -28,9 +37,18 @@ const CategoryQuery = (props) => {
           onChange={(e) => setCategorySearch(e.target.value)}
           className="grow border border-black text-black pl-2"
         />
-        <button className="ml-4 bg-sky-100 dark:bg-teal-600 px-2 border border-black font-semibold text-xl">
-          +
-        </button>
+        {queriedCategories.length === 0 ? (
+          <button
+            onClick={(e) => {
+              addNewCategory(e);
+            }}
+            className="ml-4 bg-sky-100 dark:bg-teal-600 px-2 border border-black font-semibold text-xl"
+          >
+            +
+          </button>
+        ) : (
+          <></>
+        )}
       </span>
       <ul className="flex flex-wrap">
         {queriedCategories.length ? (

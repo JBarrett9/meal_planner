@@ -1,12 +1,18 @@
 import { Link } from "react-router-dom";
 import { useWindowSize } from "../../hooks";
+import logo from "../../images/mealplanlogo.png";
 const Navbar = (props) => {
   const size = useWindowSize();
 
   return (
-    <header className="flex justify-between flex-wrap">
+    <header
+      className="flex justify-between flex-wrap mb-4"
+      onClick={() => {
+        if (props.menuOpen) props.setMenuOpen(false);
+      }}
+    >
       <Link className="text-4xl dark:text-slate-200 mt-2 ml-4" to="/">
-        M-Plan
+        <img src={logo} alt="logo" className="w-24" />
       </Link>
       {props.token ? (
         <button

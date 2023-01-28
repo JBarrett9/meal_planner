@@ -9,7 +9,7 @@ const RecipeForm = (props) => {
   const [name, setName] = useState("");
   const [steps, setSteps] = useState([]);
   const [step, setStep] = useState("");
-  const [description, setDescription] = useState([]);
+  const [description, setDescription] = useState("");
   const [source, setSource] = useState("");
   const [ingredients, setIngredients] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -27,19 +27,13 @@ const RecipeForm = (props) => {
     const recipe = await createRecipe({
       token: props.token,
       name,
-      steps: steps.toString(),
+      steps: steps.join("\n"),
       description,
       source,
       pub: makePublic,
+      ingredients,
+      categories,
     });
-
-    for (let ingredient of ingredients) {
-      console.log(ingredient);
-    }
-
-    for (let category of categories) {
-      console.log(category);
-    }
 
     if (recipe.id) {
       navigate("/recipes");
@@ -95,8 +89,15 @@ const RecipeForm = (props) => {
           +
         </button>
       </span>
-      <label className="mt-4">Categories: </label>
-      <CategoryQuery categories={categories} setCategories={setCategories} />
+      <span className="mt-4">
+        <label>Categories: </label>
+        <FormList items={categories} setItems={setCategories} />
+        <CategoryQuery
+          categories={categories}
+          setCategories={setCategories}
+          token={props.token}
+        />
+      </span>
       <span className="mt-4 flex justify-center items-center">
         <label className="mr-2">Make Public? </label>
         <input

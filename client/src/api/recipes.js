@@ -1,3 +1,23 @@
+const addCategoryToRecipe = async ({ token, recipeId, categoryId }) => {
+  try {
+    const response = await fetch(`/api/recipes/recipe/${recipeId}/categories`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        categoryId,
+      }),
+    });
+
+    const result = response.json();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const createRecipe = async ({
   token,
   name,
@@ -5,6 +25,8 @@ const createRecipe = async ({
   description,
   source,
   pub,
+  ingredients,
+  categories,
 }) => {
   try {
     const response = await fetch(`/api/recipes`, {
@@ -23,6 +45,53 @@ const createRecipe = async ({
     });
 
     const result = await response.json();
+
+    for (let ingredient of ingredients) {
+      await fetch(`/api/recipes/recipe/${result.id}/ingredients`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ingredientId: ingredient.id,
+          qty: ingredient.qty,
+          unit: ingredient.unit,
+          order: ingredient.order,
+        }),
+      });
+    }
+
+    for (let category of categories) {
+      await fetch(`/api/recipes/recipe/${result.id}/categories`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          categoryId: category.id,
+        }),
+      });
+    }
+
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const deleteRecipe = async ({ token, recipeId }) => {
+  try {
+    const response = await fetch(`/api/recipes/recipe/${recipeId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const result = await response.json();
     return result;
   } catch (error) {
     console.error(error);
@@ -31,7 +100,7 @@ const createRecipe = async ({
 
 const fetchRecipe = async ({ token, recipeId }) => {
   try {
-    const response = await fetch(`/api/recipes/${recipeId}`, {
+    const response = await fetch(`/api/recipes/recipe/${recipeId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -63,4 +132,10 @@ const fetchAccountRecipes = async (token) => {
   }
 };
 
-export { createRecipe, fetchRecipe, fetchAccountRecipes };
+export {
+  addCategoryToRecipe,
+  createRecipe,
+  deleteRecipe,
+  fetchRecipe,
+  fetchAccountRecipes,
+};

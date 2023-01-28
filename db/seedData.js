@@ -1,5 +1,6 @@
 const { createAccount } = require("./accounts");
 const client = require("./client");
+const { EMAIL, USER_PASS } = process.env;
 const {
   createIngredient,
   addIngredientToRecipe,
@@ -7,7 +8,7 @@ const {
 } = require("./ingredients");
 const { createList } = require("./lists");
 const { createRecipe } = require("./recipes");
-const { createUser } = require("./users");
+const { createUser, updateUser } = require("./users");
 
 const dropTables = async () => {
   try {
@@ -165,6 +166,18 @@ const populate = async () => {
     accountId: account.id,
     primaryUser: true,
   });
+
+  const adminAccount = await createAccount("Admin Account");
+
+  const admin = await createUser({
+    email: EMAIL,
+    name: "James",
+    password: USER_PASS,
+    accountId: adminAccount.id,
+    primaryUser: true,
+  });
+
+  await updateUser({ id: admin.id, admin: true });
 
   const carrot = await createIngredient({
     name: "carrot",

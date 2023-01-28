@@ -10,6 +10,7 @@ const Login = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(email, password);
     const response = await login({ email, password });
     if (response.success) {
       localStorage.setItem("jwt", response.token);
@@ -38,7 +39,10 @@ const Login = (props) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className="mt-4 bg-slate-600 py-2 text-stone-50 text-xl shadow-md shadow-gray-800 hover:shadow-none hover:bg-slate-700">
+        <button
+          onClick={(e) => handleSubmit(e)}
+          className="mt-4 bg-slate-600 py-2 text-stone-50 text-xl shadow-md shadow-gray-800 hover:shadow-none hover:bg-slate-700"
+        >
           Submit
         </button>
         <p className="text-center mt-4 mb-4">

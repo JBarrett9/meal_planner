@@ -6,7 +6,7 @@ const RecipeListNav = () => {
   const [keywords, setKeywords] = useState("");
 
   return (
-    <nav className="w-full px-6 pb-4 mx-auto flex flex-col md:flex-row md:items-center text-center bg-emerald-500 dark:bg-stone-800 dark:text-stone-50 shadow shadow-black dark:border-none mb-4">
+    <nav className="w-full px-6 pb-4 mx-auto flex flex-col md:flex-row md:items-center text-center bg-slate-200 dark:bg-stone-700 dark:text-stone-50 shadow shadow-black dark:border-none mb-4">
       <FormInput
         label="Search: "
         type="text"

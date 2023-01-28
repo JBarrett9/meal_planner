@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { Link } from "react-router-dom";
 
 const Menu = (props) => {
@@ -10,12 +9,55 @@ const Menu = (props) => {
           : "hidden"
       }
     >
-      <Link to="/meal_plan">My Meal Plan</Link>
-      <Link to="/recipes">Recipes</Link>
-      <Link to="/lists">Grocery Lists</Link>
-      <Link to="/inventory">My Inventory</Link>
-      <Link to="/account">Account Settings</Link>
-      <Link onClick={() => props.logout()} to="/" className="mt-2">
+      {props.user.admin ? <Link to="/admin">Admin Dashboard</Link> : ""}
+      <Link
+        to="/meal_plan"
+        onClick={() => {
+          props.setMenuOpen(false);
+        }}
+      >
+        My Meal Plan
+      </Link>
+      <Link
+        to="/recipes"
+        onClick={() => {
+          props.setMenuOpen(false);
+        }}
+      >
+        Recipes
+      </Link>
+      <Link
+        to="/lists"
+        onClick={() => {
+          props.setMenuOpen(false);
+        }}
+      >
+        Grocery Lists
+      </Link>
+      <Link
+        to="/inventory"
+        onClick={() => {
+          props.setMenuOpen(false);
+        }}
+      >
+        My Inventory
+      </Link>
+      <Link
+        to="/account"
+        onClick={() => {
+          props.setMenuOpen(false);
+        }}
+      >
+        Account Settings
+      </Link>
+      <Link
+        onClick={() => {
+          props.logout();
+          props.setMenuOpen(false);
+        }}
+        to="/"
+        className="mt-2"
+      >
         Sign Out
       </Link>
     </nav>

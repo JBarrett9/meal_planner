@@ -14,7 +14,7 @@ router.get("/query", async (req, res, next) => {
     const ingredients = allIngredients.filter((ingredient) =>
       ingredient.name.includes(qs.toLowerCase())
     );
-    res.send(ingredients);
+    res.send(ingredients.slice(0, 8));
   } catch (error) {
     next(error);
   }

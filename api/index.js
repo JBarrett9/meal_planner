@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const { getUserById } = require("../db/users");
 
 const { JWT_SECRET } = process.env;
 router.use(express.json());
@@ -52,7 +53,7 @@ router.use("/ingredients", ingredientsRouter);
 router.use("/inventories", inventoriesRouter);
 router.use("/lists", listsRouter);
 router.use("/meals", mealsRouter);
-router.use("/recipesRouter", recipesRouter);
+router.use("/recipes", recipesRouter);
 router.use("/users", usersRouter);
 
 router.use("*", (req, res) => {
@@ -65,6 +66,7 @@ router.use("*", (req, res) => {
 
 router.use((error, req, res, next) => {
   res.status(500).send({
+    error: error.error,
     name: error.name,
     message: error.message,
   });
@@ -72,6 +74,7 @@ router.use((error, req, res, next) => {
 
 router.use((error, req, res, next) => {
   res.send({
+    error: error.error,
     name: error.name,
     message: error.message,
   });

@@ -1,4 +1,6 @@
+const { removeCategoryFromRecipe } = require("./categories");
 const client = require("./client");
+const { removeIngredientFromRecipe } = require("./ingredients");
 
 const createRecipe = async ({
   name,
@@ -27,6 +29,23 @@ const createRecipe = async ({
 
 const deleteRecipe = async (id) => {
   try {
+    const recipe = await getRecipe(id);
+
+    for (let ingredient of recipe.ingredients) {
+      await removeIngredientFromRecipe(ingredient.id);
+    }
+
+    for (let category of recipe.categories) {
+      await removeCategoryFromRecipe(category.id);
+    }
+
+    const {
+      rows: [deleted],
+    } = await client.query(`DELETE FROM recipes WHERE id=$1 RETURNING *;`, [
+      id,
+    ]);
+
+    return deleted;
   } catch (error) {
     console.error(error);
   }
@@ -124,6 +143,7 @@ const updateRecipe = async () => {};
 
 module.exports = {
   createRecipe,
+  deleteRecipe,
   getAccountRecipes,
   getRecipe,
   getRecipesByCategory,

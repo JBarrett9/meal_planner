@@ -1,10 +1,15 @@
 const express = require("express");
-const { addIngredientToRecipe } = require("../db/ingredients");
+const { addCategoryToRecipe } = require("../db/categories");
+const {
+  addIngredientToRecipe,
+  removeIngredientFromRecipe,
+} = require("../db/ingredients");
 const {
   createRecipe,
   getRecipe,
   getAccountRecipes,
   getRecipesByCategory,
+  deleteRecipe,
 } = require("../db/recipes");
 const { requireUser } = require("./utils");
 const router = express.Router();
@@ -42,6 +47,46 @@ router.get("/recipe/:recipeId", requireUser, async (req, res, next) => {
     }
 
     res.send(recipe);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/recipe/:recipeId", requireUser, async (req, res, next) => {
+  try {
+    const { recipeId } = req.params;
+    const recipe = await getRecipe(recipeId);
+
+    if (recipe.accountId !== req.user.accountId) {
+      res.status(403).send({
+        error: `User is not authorized to access this account`,
+        message: `User is not authorized to access this account`,
+        name: `UserAccountMismatchError`,
+      });
+    }
+
+    const removed = await deleteRecipe(recipeId);
+
+    return removed;
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/recipe/:recipeId", requireUser, async (req, res, next) => {
+  try {
+    const { recipeId } = req.params;
+    const { name, steps, description, source, pub } = req.body;
+    const { id: userId, accountId } = req.user;
+
+    const recipe = await getRecipe(recipeId);
+    if (recipe.accountId !== req.user.accountId) {
+      res.status(403).send({
+        error: `User is not authorized to access this account`,
+        message: `User is not authorized to access this account`,
+        name: `UserAccountMismatchError`,
+      });
+    }
   } catch (error) {
     next(error);
   }
@@ -89,6 +134,32 @@ router.post(
         order,
       });
       res.send(recipeIngredient);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.post(
+  "/recipe/:recipeId/categories",
+  requireUser,
+  async (req, res, next) => {
+    try {
+      const { recipeId } = req.params;
+      const recipe = await getRecipe(recipeId);
+      if (recipe.accountId !== req.user.accountId) {
+        res.status(403).send({
+          error: `User is not authorized to access this account`,
+          message: `User is not authorized to access this account`,
+          name: `UserAccountMismatchError`,
+        });
+      }
+      const { categoryId } = req.body;
+      const recipeCategory = await addCategoryToRecipe({
+        recipeId,
+        categoryId,
+      });
+      res.send(recipeCategory);
     } catch (error) {
       next(error);
     }

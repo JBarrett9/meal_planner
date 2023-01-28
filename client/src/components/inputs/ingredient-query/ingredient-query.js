@@ -9,13 +9,16 @@ const IngredientQuery = (props) => {
   const [ingredientSearch, setIngredientSearch] = useState("");
   const [qty, setQty] = useState(0);
   const [unit, setUnit] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const delay = setTimeout(async () => {
       const ingredients = await getIngredientsByQuery(ingredientSearch);
+      setIsLoading(false);
       setQueriedIngredients(ingredients);
     }, 1000);
 
+    setIsLoading(true);
     return () => clearTimeout(delay);
   }, [ingredientSearch]);
 
@@ -108,6 +111,15 @@ const IngredientQuery = (props) => {
         </div>
       </span>
       <ul className="flex flex-wrap">
+        {isLoading ? (
+          <div class="flex mx-auto w-full mt-4 items-center justify-center space-x-2">
+            <div class="w-4 h-4 bg-sky-400 rounded-full animate-bounce delay-1000"></div>
+            <div class="w-4 h-4 bg-sky-400 rounded-full animate-bounce"></div>
+            <div class="w-4 h-4 bg-sky-400 rounded-full animate-bounce delay-1000"></div>
+          </div>
+        ) : (
+          ""
+        )}
         {queriedIngredients.length ? (
           queriedIngredients.map((ingredient) => (
             <li
