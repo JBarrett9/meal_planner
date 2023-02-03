@@ -71,6 +71,7 @@ const createRecipe = async ({
         },
         body: JSON.stringify({
           categoryId: category.id,
+          recipeId: result.id,
         }),
       });
     }
@@ -115,15 +116,38 @@ const fetchRecipe = async ({ token, recipeId }) => {
   }
 };
 
-const fetchAccountRecipes = async (token) => {
+const fetchAccountRecipes = async (token, query, page) => {
   try {
-    const response = await fetch(`/api/recipes/account`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `/api/recipes/account?search=${query}&page=${page}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const result = response.json();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const fetchStep = async ({ token, recipeId, step }) => {
+  try {
+    const response = await fetch(
+      `/api/recipes/recipe/${recipeId}/step_view?step=${step}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     const result = response.json();
     return result;
@@ -138,4 +162,5 @@ export {
   deleteRecipe,
   fetchRecipe,
   fetchAccountRecipes,
+  fetchStep,
 };

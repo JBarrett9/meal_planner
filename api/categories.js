@@ -33,7 +33,7 @@ router.get("/category/:categoryId", async (req, res, next) => {
 router.post("/", requireUser, async (req, res, next) => {
   const { name } = req.body;
   try {
-    const category = await createCategory(name);
+    const category = await createCategory(name.toLowerCase());
 
     res.send(category);
   } catch (error) {

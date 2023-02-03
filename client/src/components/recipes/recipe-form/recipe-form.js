@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { createRecipe } from "../../../api/recipes";
 import { Form, FormInput, FormList } from "../../inputs";
 import CategoryQuery from "../../inputs/category-query/category-query";
@@ -15,6 +15,7 @@ const RecipeForm = (props) => {
   const [categories, setCategories] = useState([]);
   const [makePublic, setMakePublic] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const addStep = (e) => {
     e.preventDefault();
@@ -39,6 +40,19 @@ const RecipeForm = (props) => {
       navigate("/recipes");
     }
   };
+
+  useEffect(() => {
+    if (location.state) {
+      const { recipe } = location.state;
+      setName(recipe.name);
+      setSteps(recipe.steps.split("\n"));
+      setDescription(recipe.description);
+      setSource(recipe.source);
+      setIngredients(recipe.ingredients);
+      setCategories(recipe.categories);
+      setMakePublic(recipe.public);
+    }
+  }, []);
 
   return (
     <Form title="New Recipe">

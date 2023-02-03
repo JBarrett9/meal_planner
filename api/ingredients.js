@@ -35,7 +35,7 @@ router.post("/", requireUser, async (req, res, next) => {
   const { name, conversion, calories, type, nutrition } = req.body;
   try {
     const ingredient = await createIngredient({
-      name,
+      name: name.toLowerCase(),
       conversion,
       calories,
       type,

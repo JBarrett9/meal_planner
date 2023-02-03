@@ -12,21 +12,13 @@ router.post("/", requireUser, async (req, res, next) => {
   }
 });
 
-router.get("/:accountId", requireUser, async (req, res, next) => {
-  const { accountId } = req.params;
-  if (user.accountId !== accountId) {
-    next({
-      error: "unauthorizedAccessError",
-      message: "User is not authorized to access this inventory",
-      name: "unauthorizedAccessError",
-    });
-  } else {
-    try {
-      const inventory = await getInventory(accountId);
-      res.send(inventory);
-    } catch (error) {
-      next(error);
-    }
+router.get("/", requireUser, async (req, res, next) => {
+  const { accountId } = req.user.accountId;
+  try {
+    const inventory = await getInventory(accountId);
+    res.send(inventory);
+  } catch (error) {
+    next(error);
   }
 });
 

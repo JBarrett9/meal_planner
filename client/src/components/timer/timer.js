@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import alarm from "./clock-alarm-8761.mp3";
 
 const Timer = (props) => {
   const [timer, setTimer] = useState("00:00:00");
@@ -6,6 +7,7 @@ const Timer = (props) => {
   const [minutes, setMinutes] = useState(0);
   const [hours, setHours] = useState(0);
   const [isTicking, setIsTicking] = useState(false);
+  const [isRinging, setIsRinging] = useState(false);
   const wrapperRef = useRef(null);
 
   const getTimeRemaining = (e) => {
@@ -31,6 +33,9 @@ const Timer = (props) => {
           ":" +
           (seconds > 9 ? seconds : "0" + seconds)
       );
+    }
+    if (total <= 0) {
+      setIsRinging(true);
     }
   };
 
@@ -59,6 +64,10 @@ const Timer = (props) => {
   };
 
   useEffect(() => {
+    if (isRinging) new Audio(alarm).play();
+  }, [isRinging]);
+
+  useEffect(() => {
     setHours(props.hours);
     setMinutes(props.minutes);
     setSeconds(props.seconds);
@@ -80,12 +89,16 @@ const Timer = (props) => {
   };
 
   return (
-    <div>
+    <div className="flex justify-center my-4">
       {isTicking ? (
         <>
-          <h3>{timer}</h3>
+          <h3 className="bg-zinc-100 px-4 shadow shadow-black text-xl text-black">
+            {timer}
+          </h3>
           <button
+            className="ml-4 bg-blue-600 dark:bg-blue-300 px-4 text-white dark:text-black font-semibold shadow shadow-black tracking-wide"
             onClick={() => {
+              setIsRinging(false);
               setIsTicking(false);
               handleReset();
             }}
@@ -97,24 +110,27 @@ const Timer = (props) => {
         <>
           <form>
             <input
+              className="shadow shadow-black text-center text-black"
               pattern="[0-9]*"
               value={hours}
               onChange={(e) => setHours(e.target.value)}
               type="number"
               min="0"
               max="24"
-            />{" "}
-            :{" "}
+            />
+            <span className="text-xl font-bold"> : </span>
             <input
+              className="shadow shadow-black text-center text-black"
               pattern="[0-9]*"
               value={minutes}
               onChange={(e) => setMinutes(e.target.value)}
               type="number"
               min="0"
               max="60"
-            />{" "}
-            :{" "}
+            />
+            <span className="text-xl font-bold"> : </span>
             <input
+              className="shadow shadow-black text-center text-black"
               pattern="[0-9]*"
               value={seconds}
               onChange={(e) => setSeconds(e.target.value)}
@@ -124,6 +140,7 @@ const Timer = (props) => {
             />
           </form>
           <button
+            className="ml-4 bg-blue-600 dark:bg-blue-300 px-4 text-white dark:text-black font-semibold shadow shadow-black tracking-wide"
             onClick={() => {
               setIsTicking(true);
               handleStart();
