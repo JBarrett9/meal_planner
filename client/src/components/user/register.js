@@ -1,9 +1,11 @@
 import { useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../../api/authentication";
 import FormInput from "../inputs/form-input";
 
 const Register = (props) => {
+  // 6LdrVVIkAAAAAMNZ0wwI0WEfLCMaIGVEVdvGhBLB
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,6 +24,10 @@ const Register = (props) => {
       props.setUser(response.user);
       navigate("/");
     }
+  };
+
+  const handleReCAPTCHAChange = (value) => {
+    console.log("Captcha value:", value);
   };
 
   return (
@@ -55,11 +61,17 @@ const Register = (props) => {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
+        <span className="flex justify-center mt-4">
+          <ReCAPTCHA
+            sitekey=" 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+            onChange={handleReCAPTCHAChange}
+          />
+        </span>
         <button className="mt-4 bg-slate-600 py-2 text-stone-50 text-xl shadow-md shadow-gray-800 hover:shadow-none hover:bg-slate-700">
           Submit
         </button>
         <p className="text-center mt-4 mb-4">
-          Already have an account?{" "}
+          Already have an account?
           <Link
             className="text-teal-900 dark:text-teal-600 font-bold"
             to="/user/login"

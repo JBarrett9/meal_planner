@@ -2,6 +2,21 @@ const { removeCategoryFromRecipe } = require("./categories");
 const client = require("./client");
 const { removeIngredientFromRecipe } = require("./ingredients");
 
+const addRecipeToMeal = async ({ mealId, recipeId }) => {
+  try {
+    const {
+      rows: [mealRecipe],
+    } = await client.query(
+      `INSERT INTO meal_recipes("mealId", "recipeId") VALUES ($1, $2) RETURNING *;`,
+      [mealId, recipeId]
+    );
+
+    return mealRecipe;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const createRecipe = async ({
   name,
   steps,
@@ -142,6 +157,7 @@ const getRecipesByCategory = async (categoryId, accountId) => {
 const updateRecipe = async () => {};
 
 module.exports = {
+  addRecipeToMeal,
   createRecipe,
   deleteRecipe,
   getAccountRecipes,

@@ -1,24 +1,154 @@
-const MealPlan = () => {
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  addRecipeToMeal,
+  createMeal,
+  fetchAccountMeals,
+} from "../../api/meals";
+import { fetchAccountRecipes } from "../../api/recipes";
+import { useOutsideClick } from "../../hooks";
+import MealDisplay from "./meal-display";
+
+const MealPlan = (props) => {
+  const [displayForm, setDisplayForm] = useState(false);
+  const [meals, setMeals] = useState([]);
+  const today = new Date();
+  const [weekday, setWeekday] = useState(today.toDateString());
+  const [search, setSearch] = useState("");
+  const [date, setDate] = useState({});
+  const [recipes, setRecipes] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentMeal, setCurrentMeal] = useState([]);
+  const [mealDisplay, setMealDisplay] = useState(false);
+
+  useEffect(() => {
+    async function getMeals() {
+      const data = await fetchAccountMeals(props.token);
+      setMeals(data);
+    }
+
+    getMeals();
+  }, []);
+
+  useEffect(() => {
+    const delay = setTimeout(async () => {
+      const data = await fetchAccountRecipes(props.token, search, 1);
+      setIsLoading(false);
+      setRecipes(data);
+    }, 1000);
+
+    setIsLoading(true);
+    return () => clearTimeout(delay);
+  }, [search]);
+
+  const handleRecipeSelect = async (recipe) => {
+    const meal = await createMeal({ token: props.token, date, time: 1 });
+    const mealRecipe = await addRecipeToMeal({
+      token: props.token,
+      mealId: meal.id,
+      recipeId: recipe.id,
+    });
+    const data = await fetchAccountMeals(props.token);
+    setMeals(data);
+    setDisplayForm(false);
+  };
+
   const week = Array.from(Array(7).keys()).map((idx) => {
-    const d = new Date();
+    const d = new Date(weekday);
     d.setDate(d.getDate() - d.getDay() + idx);
     return d;
   });
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
+  const wrapperRef = useRef(null);
+  const wrapperRef2 = useRef(null);
+  useOutsideClick(wrapperRef, setDisplayForm);
+  useOutsideClick(wrapperRef2, setMealDisplay);
+
   return (
-    <span className="flex flex-wrap justify-center dark:text-white">
+    <span className="flex flex-wrap mx-auto w-11/12 lg:w-max dark:text-white">
+      <div ref={wrapperRef}>
+        {displayForm ? (
+          <div className="absolute pb-6 w-80 px-4 bg-stone-200 left-1/2 -ml-40 shadow-lg shadow-black dark:bg-zinc-800">
+            <h2 className="text-xl text-center font-semibold mt-4">
+              Select Recipe
+            </h2>
+            <span className="flex justify-center mt-2">
+              <label className="mr-2">Search: </label>
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="border border-black focus:shadow-md focus:shadow-black"
+              />
+            </span>
+            {isLoading ? (
+              <div className="flex mx-auto w-full mt-4 items-center justify-center space-x-2">
+                <div className="w-4 h-4 bg-emerald-500 rounded-full animate-bounce delay-1000"></div>
+                <div className="w-4 h-4 bg-emerald-500 rounded-full animate-bounce"></div>
+                <div className="w-4 h-4 bg-emerald-500 rounded-full animate-bounce delay-1000"></div>
+              </div>
+            ) : (
+              ""
+            )}
+            <span className="flex flex-wrap">
+              {recipes.length > 0
+                ? recipes.map((recipe) => (
+                    <button
+                      key={recipe.id}
+                      onClick={() => handleRecipeSelect(recipe)}
+                      className="mt-4 bg-purple-300 dark:bg-teal-700 dark:text-stone-300 py-1 px-4 text-sm capitalize mx-2 shadow shadow-black"
+                    >
+                      {recipe.name}
+                    </button>
+                  ))
+                : ""}
+            </span>
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
+      <div ref={wrapperRef2}>
+        {mealDisplay ? <MealDisplay meal={currentMeal} /> : ""}
+      </div>
       {week.map((day) => (
-        <div className="border border-black dark:border-teal-300 bg-stone-100 dark:bg-stone-800 shadow-md shadow-gray-700 flex flex-col w-28 m-1 text-center pb-2">
+        <div
+          key={day.toDateString()}
+          className={`border border-black dark:border-teal-300 bg-stone-100 shadow-md shadow-gray-700 flex flex-col w-28 m-1 text-center pb-2 ${
+            day.toDateString() === today.toDateString()
+              ? "bg-sky-100 dark:bg-slate-800"
+              : "dark:bg-stone-800"
+          }`}
+        >
           <span className="flex justify-between pl-2">
             {days[day.getDay()]}
             <span className="pr-2 border-l border-b border-black dark:border-teal-300 w-8 text-right">
               {day.getDate()}
             </span>
           </span>
-          <p className="p-2"></p>
-          <button className="text-blue-800 dark:text-blue-300 font-semibold text-3xl">
+          {meals[day.toDateString()] ? (
+            <ul
+              onClick={() => {
+                setCurrentMeal(meals[day.toDateString()]);
+                setMealDisplay(true);
+              }}
+            >
+              {meals[day.toDateString()].map((recipe) => (
+                <li key={recipe.id}>{recipe.name}</li>
+              ))}
+            </ul>
+          ) : (
+            ""
+          )}
+          <button
+            onClick={(e) => {
+              setDate(day);
+              setDisplayForm(true);
+            }}
+            className="text-blue-800 dark:text-blue-300 font-semibold text-3xl"
+          >
             +
           </button>
         </div>

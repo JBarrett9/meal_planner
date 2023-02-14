@@ -1,5 +1,8 @@
 const express = require("express");
-const { addCategoryToRecipe } = require("../db/categories");
+const {
+  addCategoryToRecipe,
+  removeCategoryFromRecipe,
+} = require("../db/categories");
 const {
   addIngredientToRecipe,
   removeIngredientFromRecipe,
@@ -196,12 +199,13 @@ router.get(
       }
 
       let data = { ingredients: recipe.ingredients };
+      const steps = recipe.steps.split("\n");
+      data.limit = steps.length;
 
       if (step === 0) {
         res.send(data);
       }
 
-      const steps = recipe.steps.split("\n");
       const current = steps[step - 1];
       data.current = current;
 
@@ -214,13 +218,13 @@ router.get(
       data.hours = "00";
 
       if (second) {
-        data.seconds = second.match(/\d+/)[0];
+        data.seconds = second[0].match(/\d+/)[0];
       }
       if (minute) {
-        data.minutes = minute.match(/\d+/)[0];
+        data.minutes = minute[0].match(/\d+/)[0];
       }
       if (hour) {
-        data.hours = hour.match(/\d+/)[0];
+        data.hours = hour[0].match(/\d+/)[0];
       }
 
       res.send(data);
@@ -230,28 +234,21 @@ router.get(
   }
 );
 
-// router.delete(
-//   "/recipe_category/:recipeCategoryId",
-//   requireUser,
-//   async (req, res, next) => {
-//     try {
-//       const { recipeCategoryId } = req.params;
-//       const {recipeCategory} = await
-//     if (recipe.accountId !== req.user.accountId) {
-//       res.status(403).send({
-//         error: `User is not authorized to access this account`,
-//         message: `User is not authorized to access this account`,
-//         name: `UserAccountMismatchError`,
-//       });
-//     }
+router.delete(
+  "/recipe_category/:recipeCategoryId",
+  requireUser,
+  async (req, res, next) => {
+    try {
+      const { recipeCategoryId } = req.params;
+      const { recipeCategory } = await removeCategoryFromRecipe(
+        recipeCategoryId
+      );
 
-//     const removed = await deleteRecipe(recipeId);
-
-//     return removed;
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// )
+      return recipeCategory;
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;

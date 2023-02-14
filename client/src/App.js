@@ -4,6 +4,7 @@ import { getUser } from "./api/authentication";
 import { Dashboard } from "./components/admin";
 import Footer from "./components/footer/footer";
 import Home from "./components/home/home";
+import Lists from "./components/lists/lists";
 import MealPlan from "./components/meal-plan/meal-plan";
 import Menu from "./components/navbar/menu";
 import Navbar from "./components/navbar/navbar";
@@ -42,7 +43,7 @@ function App() {
 
   return (
     <>
-      <div className="mb-16">
+      <div className="min-h-screen pb-24">
         <div ref={wrapperRef}>
           <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} token={token} />
           <Menu
@@ -68,7 +69,11 @@ function App() {
             path="/recipes/*"
             element={<Recipes user={user} token={token} />}
           ></Route>
-          <Route path="/meal_plan" element={<MealPlan />}></Route>
+          <Route
+            path="/lists/*"
+            element={<Lists user={user} token={token} />}
+          ></Route>
+          <Route path="/meal_plan" element={<MealPlan token={token} />}></Route>
           {user.admin ? (
             <Route path="/admin/*" element={<Dashboard user={user} />}></Route>
           ) : (

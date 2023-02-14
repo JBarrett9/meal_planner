@@ -5,6 +5,7 @@ import Timer from "../timer/timer";
 
 const RecipeDisplay = (props) => {
   const [step, setStep] = useState(0);
+  const [limit, setLimit] = useState(0);
   const [current, setCurrent] = useState("");
   const [seconds, setSeconds] = useState("00");
   const [minutes, setMinutes] = useState("00");
@@ -17,6 +18,7 @@ const RecipeDisplay = (props) => {
     async function getStep() {
       const data = await fetchStep({ token: props.token, recipeId, step });
       setIngredients(data.ingredients);
+      setLimit(data.limit);
 
       console.log(data);
 
@@ -34,13 +36,21 @@ const RecipeDisplay = (props) => {
   return (
     <div className="mx-auto mt-4 w-96 bg-orange-100 dark:bg-stone-800 dark:text-white px-4 py-2">
       <span className="flex justify-between mb-2">
-        <button onClick={() => setStep(step - 1)}>prev.</button>
-        <button onClick={() => setStep(step + 1)}>next</button>
+        {step > 0 ? (
+          <button onClick={() => setStep(step - 1)}>prev.</button>
+        ) : (
+          <span></span>
+        )}
+        {step < limit ? (
+          <button onClick={() => setStep(step + 1)}>next</button>
+        ) : (
+          <span></span>
+        )}
       </span>
       {step === 0 ? (
-        <>
-          <h3>Mise en place</h3>
-          <ul className="list-disc ml-4 mb-6 mt-8">
+        <div className="flex flex-col">
+          <h3 className="text-center text-xl">Mise en place</h3>
+          <ul className="list-disc mx-auto mb-6 mt-2">
             {ingredients.length > 0
               ? ingredients.map((ingredient) => (
                   <li key={ingredient.id}>
@@ -49,11 +59,11 @@ const RecipeDisplay = (props) => {
                 ))
               : ""}
           </ul>
-        </>
+        </div>
       ) : (
         <>
           <Timer hours={hours} minutes={minutes} seconds={seconds} />
-          <p>{current}</p>
+          <p className="mb-4 mx-2">{current}</p>
         </>
       )}
     </div>

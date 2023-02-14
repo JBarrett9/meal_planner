@@ -156,6 +156,26 @@ const fetchStep = async ({ token, recipeId, step }) => {
   }
 };
 
+const removeCategoryFromRecipe = async ({ token, recicpeCategoryId }) => {
+  try {
+    const response = await fetch(
+      `/api/recipes/recipe_category/${recicpeCategoryId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const result = response.json();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export {
   addCategoryToRecipe,
   createRecipe,
@@ -163,4 +183,5 @@ export {
   fetchRecipe,
   fetchAccountRecipes,
   fetchStep,
+  removeCategoryFromRecipe,
 };

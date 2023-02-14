@@ -92,6 +92,21 @@ const getMeal = async (id) => {
   }
 };
 
+const getMealByDate = async ({ date, accountId }) => {
+  try {
+    const {
+      rows: [meal],
+    } = await client.query(
+      `SELECT * FROM meals WHERE "date"=$1 AND "accountId"=$2;`,
+      [date, accountId]
+    );
+
+    return meal;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 /**
  * Returns an array of meal objects associated with the given user
  *
@@ -125,5 +140,6 @@ module.exports = {
   createMeal,
   getAccountMeals,
   getMeal,
+  getMealByDate,
   getUserMeals,
 };

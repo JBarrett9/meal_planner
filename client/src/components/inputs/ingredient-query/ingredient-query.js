@@ -75,11 +75,13 @@ const IngredientQuery = (props) => {
             <option value="ml">milliliter/s</option>
             <option value="liter">liter/s</option>
             <option value="oz">ounce/s</option>
+            <options value="lbs">lbs</options>
             <option value="quart">quart/s</option>
             <option value="gal">gallon/s</option>
             <option value="pinch">pinch/es</option>
-            <option value="stalk">stalk</option>
-            <option value="sprig">sprig</option>
+            <option value="stalk">stalk/s</option>
+            <option value="sprig">sprig/s</option>
+            <option value="clove">clove/s</option>
             <option value="sm">small</option>
             <option value="md">medium</option>
             <option value="lg">large</option>

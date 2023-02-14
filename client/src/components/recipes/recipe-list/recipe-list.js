@@ -32,10 +32,10 @@ const RecipeList = (props) => {
       </nav>
       <ul className="w-96 mx-auto">
         {isLoading ? (
-          <div class="flex mx-auto w-full mt-4 items-center justify-center space-x-2">
-            <div class="w-4 h-4 bg-emerald-500 rounded-full animate-bounce delay-1000"></div>
-            <div class="w-4 h-4 bg-emerald-500 rounded-full animate-bounce"></div>
-            <div class="w-4 h-4 bg-emerald-500 rounded-full animate-bounce delay-1000"></div>
+          <div className="flex mx-auto w-full mt-4 items-center justify-center space-x-2">
+            <div className="w-4 h-4 bg-emerald-500 rounded-full animate-bounce delay-1000"></div>
+            <div className="w-4 h-4 bg-emerald-500 rounded-full animate-bounce"></div>
+            <div className="w-4 h-4 bg-emerald-500 rounded-full animate-bounce delay-1000"></div>
           </div>
         ) : (
           ""
