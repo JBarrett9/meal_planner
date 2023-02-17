@@ -88,7 +88,7 @@ const Recipe = (props) => {
   useOutsideClick(wrapperRef3, setDisplayCategorySelect);
 
   return (
-    <div className="bg-orange-100 dark:bg-stone-800 w-11/12 mx-auto sm:w-3/5 mt-8 shadow shadow-black px-4 py-6 dark:text-white">
+    <div className="bg-stone-100 dark:bg-stone-800 w-11/12 mx-auto sm:w-3/5 mt-8 shadow shadow-black px-4 py-6 dark:text-white">
       {recipe && recipe.name ? (
         <>
           <span className="flex flex-col">
@@ -111,6 +111,11 @@ const Recipe = (props) => {
                   className="material-symbols-outlined text-purple-700 dark:text-purple-400"
                 >
                   calendar_add_on
+                </span>
+              </Link>
+              <Link>
+                <span class="material-symbols-outlined text-fuchsia-700 dark:text-fuchsia-400">
+                  playlist_add
                 </span>
               </Link>
               <Link>

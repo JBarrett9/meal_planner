@@ -43,7 +43,7 @@ const IngredientQuery = (props) => {
     <span className="">
       <span className="flex flex-wrap">
         <div className="flex flex-col mr-4 mt-2 w-12">
-          <label>Qty</label>
+          <label className="text-white">Qty</label>
           <input
             value={qty}
             onChange={(e) => setQty(e.target.value)}
@@ -53,7 +53,7 @@ const IngredientQuery = (props) => {
           />
         </div>
         <div className="flex flex-col mt-2">
-          <label>Unit</label>
+          <label className="text-white">Unit</label>
           <select
             value={unit}
             onFocus={(e) => (e.target.size = 7)}
@@ -62,34 +62,39 @@ const IngredientQuery = (props) => {
               setUnit(e.target.value);
               e.target.size = 1;
             }}
-            className="text-black w-full border border-black"
+            className="text-black w-full border border-black text-center"
           >
             <option disabled value="">
               {" "}
               -- select --{" "}
             </option>
+            <option disabled> -- Weight --</option>
             <option value="grams">gram/s</option>
+            <option value="oz">ounce/s</option>
+            <option value="lbs">lbs</option>
+            <option disabled> -- Volume --</option>
             <option value="tsp">teaspoon/s</option>
             <option value="tbsp">tablespoon/s</option>
             <option value="cups">cup/s</option>
             <option value="ml">milliliter/s</option>
             <option value="liter">liter/s</option>
-            <option value="oz">ounce/s</option>
-            <options value="lbs">lbs</options>
             <option value="quart">quart/s</option>
             <option value="gal">gallon/s</option>
+            <option disabled> -- Approximate -- </option>
             <option value="pinch">pinch/es</option>
-            <option value="stalk">stalk/s</option>
-            <option value="sprig">sprig/s</option>
-            <option value="clove">clove/s</option>
+            <option value="dash">dash/es</option>
             <option value="sm">small</option>
             <option value="md">medium</option>
             <option value="lg">large</option>
             <option value="xl">extra-large</option>
+            <option disabled>-- Relative --</option>
+            <option value="clove">clove/s</option>
+            <option value="stalk">stalk/s</option>
+            <option value="sprig">sprig/s</option>
           </select>
         </div>
         <div className="flex flex-col mt-2 w-full">
-          <label>Ingredient: </label>
+          <label className="text-white">Ingredient: </label>
           <span className="flex">
             <input
               type="search"

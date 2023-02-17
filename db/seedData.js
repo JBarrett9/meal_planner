@@ -79,6 +79,7 @@ const createTables = async () => {
     await client.query(`CREATE TABLE lists(
             id SERIAL PRIMARY KEY,
             active BOOLEAN DEFAULT true,
+            name VARCHAR(255),
             "accountId" INTEGER REFERENCES accounts(id),
             "creatorId" INTEGER REFERENCES users(id),
             created DATE DEFAULT CURRENT_DATE

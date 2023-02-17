@@ -10,8 +10,8 @@ const Login = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password);
     const response = await login({ email, password });
+    console.log(response);
     if (response.success) {
       localStorage.setItem("jwt", response.token);
       props.setToken(response.token);

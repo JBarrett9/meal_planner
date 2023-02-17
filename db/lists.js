@@ -1,14 +1,14 @@
 const client = require("./client");
 
-const createList = async ({ active, accountId, userId, created }) => {
+const createList = async ({ active, name, accountId, userId, created }) => {
   try {
     const {
       rows: [list],
     } = await client.query(
-      `INSERT INTO lists(active, "accountId", "creatorId", created) 
-        VALUES ($1, $2, $3, $4) 
+      `INSERT INTO lists(active, name, "accountId", "creatorId", created) 
+        VALUES ($1, $2, $3, $4, $5) 
         RETURNING *;`,
-      [active, accountId, userId, created]
+      [active, name, accountId, userId, created]
     );
 
     return list;

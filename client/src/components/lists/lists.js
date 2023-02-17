@@ -16,7 +16,10 @@ const Lists = (props) => {
           path="/list_form"
           element={<ListForm token={props.token} />}
         ></Route>
-        <Route path="/:listId" element={<List token={props.token} />}></Route>
+        <Route
+          path="/list/:listId"
+          element={<List token={props.token} />}
+        ></Route>
       </Routes>
     </div>
   );

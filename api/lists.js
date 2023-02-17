@@ -1,4 +1,5 @@
 const express = require("express");
+const { addIngredientToList } = require("../db/ingredients");
 const {
   createList,
   getList,
@@ -20,23 +21,47 @@ router.get("/list/:listId", requireUser, async (req, res, next) => {
         name: `UserAccountMismatchError`,
       });
     }
+
     res.send(list);
   } catch (error) {
     next(error);
   }
 });
 
-router.get("/account/:accountId", requireUser, async (req, res, next) => {
-  const { accountId } = req.params;
-  try {
-    if (accountId !== req.user.accountId) {
-      res.status(403).send({
-        error: `User is not authorized to access this account`,
-        message: `User is not authorized to access this account`,
-        name: `UserAccountMismatchError`,
-      });
-    }
+router.post(
+  "/list/:listId/ingredients",
+  requireUser,
+  async (req, res, next) => {
+    const { listId } = req.params;
 
+    try {
+      const list = await getList(listId);
+      if (list.accountId !== req.user.accountId) {
+        res.status(403).send({
+          error: `User is not authorized to access this list`,
+          message: `User is not authorized to access this list`,
+          name: `UserAccountMismatchError`,
+        });
+      }
+
+      const { ingredientId, qty, unit } = req.body;
+      const listIngredient = await addIngredientToList({
+        listId,
+        ingredientId,
+        qty,
+        unit,
+      });
+
+      res.send(listIngredient);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get("/account", requireUser, async (req, res, next) => {
+  const accountId = req.user.accountId;
+  try {
     const lists = await getListsByAccountId(accountId);
     res.send(lists);
   } catch (error) {
@@ -66,21 +91,14 @@ router.get(
   }
 );
 
-router.post("/account/:accountId", requireUser, async (req, res, next) => {
+router.post("/account", requireUser, async (req, res, next) => {
   try {
-    const { accountId } = req.params;
-    if (accountId !== req.user.accountId) {
-      res.status(403).send({
-        error: `User is not authorized to access this account`,
-        message: `User is not authorized to access this account`,
-        name: `UserAccountMismatchError`,
-      });
-    }
-    const userId = req.user.id;
+    const { accountId, userId } = req.user;
     const active = true;
     const created = new Date();
+    const { name } = req.body || created.toDateString();
 
-    const list = await createList({ active, accountId, userId, created });
+    const list = await createList({ active, name, accountId, userId, created });
     res.send(list);
   } catch (error) {
     next(error);
