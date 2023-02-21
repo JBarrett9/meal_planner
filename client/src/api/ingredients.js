@@ -29,6 +29,23 @@ const createIngredient = async ({
   }
 };
 
+const fetchIngredients = async (query, page) => {
+  try {
+    let url = `/api/ingredients/list?search=${query}&page=${page}`;
+
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const getIngredientsByQuery = async (query) => {
   try {
     let url = `/api/ingredients/query?search=`;
@@ -49,4 +66,4 @@ const getIngredientsByQuery = async (query) => {
   }
 };
 
-export { createIngredient, getIngredientsByQuery };
+export { createIngredient, fetchIngredients, getIngredientsByQuery };

@@ -93,17 +93,27 @@ const MealPlan = (props) => {
               ""
             )}
             <span className="flex flex-wrap">
-              {recipes.length > 0
-                ? recipes.map((recipe) => (
-                    <button
-                      key={recipe.id}
-                      onClick={() => handleRecipeSelect(recipe)}
-                      className="mt-4 bg-purple-300 dark:bg-teal-700 dark:text-stone-300 py-1 px-4 text-sm capitalize mx-2 shadow shadow-black"
-                    >
-                      {recipe.name}
-                    </button>
-                  ))
-                : ""}
+              {recipes.length > 0 ? (
+                recipes.map((recipe) => (
+                  <button
+                    key={recipe.id}
+                    onClick={() => handleRecipeSelect(recipe)}
+                    className="mt-4 bg-purple-300 dark:bg-teal-700 dark:text-stone-300 py-1 px-4 text-sm capitalize mx-2 shadow shadow-black"
+                  >
+                    {recipe.name}
+                  </button>
+                ))
+              ) : (
+                <div className="mx-auto w-fit text-lg mt-4 text-center">
+                  <p className="dark:text-gray-200">No recipes found</p>
+                  <Link
+                    to="/recipes/recipe_form"
+                    className="text-teal-800 hover:text-teal-900 dark:text-teal-400 dark:hover:text-teal-500 font-bold"
+                  >
+                    Add a recipe?
+                  </Link>
+                </div>
+              )}
             </span>
           </div>
         ) : (

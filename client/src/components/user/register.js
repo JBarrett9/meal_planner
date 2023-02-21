@@ -10,6 +10,7 @@ const Register = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [recaptchaResponse, setRecaptchaResponse] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,7 +18,13 @@ const Register = (props) => {
     if (password !== confirmPassword) {
       return;
     }
-    const response = await register({ email, password, name });
+    const response = await register({
+      email,
+      password,
+      name,
+      recaptchaResponse,
+    });
+    console.log(response);
     if (response.success) {
       localStorage.setItem("jwt", response.token);
       props.setToken(response.token);
@@ -26,8 +33,8 @@ const Register = (props) => {
     }
   };
 
-  const handleReCAPTCHAChange = (value) => {
-    console.log("Captcha value:", value);
+  const handleReCAPTCHAChange = async (value) => {
+    setRecaptchaResponse(value);
   };
 
   return (
@@ -63,7 +70,7 @@ const Register = (props) => {
         />
         <span className="flex justify-center mt-4">
           <ReCAPTCHA
-            sitekey=" 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+            sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
             onChange={handleReCAPTCHAChange}
           />
         </span>

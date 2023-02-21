@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, G_SECRET } = process.env;
 const { requireUser, requireAdmin } = require("./utils");
 
 const {
@@ -15,6 +15,22 @@ const {
 } = require("../db/users");
 const { createAccount } = require("../db/accounts");
 const { createInventory, getInventory } = require("../db/inventories");
+
+const validateRecaptcha = async (response_key) => {
+  try {
+    const secret_key = G_SECRET;
+    const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secret_key}&response=${response_key}`;
+
+    const response = await fetch(url, {
+      method: "POST",
+    });
+
+    const result = response.json();
+    return result.success == true;
+  } catch (error) {
+    return error;
+  }
+};
 
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
@@ -60,7 +76,17 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.post("/register", async (req, res, next) => {
-  let { email, password, name, accountId } = req.body;
+  let { email, password, name, accountId, recaptchaResponse } = req.body;
+  const human = await validateRecaptcha(recaptchaResponse);
+  if (!human) {
+    return res
+      .status(401)
+      .send({
+        error: "reCaptchaFailedError",
+        name: "reCaptchaFailedError",
+        message: `Could not verify that the user is human`,
+      });
+  }
   const _user = await getUserByEmail(email);
   if (_user) {
     next({

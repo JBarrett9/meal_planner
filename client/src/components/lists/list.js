@@ -39,9 +39,14 @@ const List = (props) => {
     }
   };
 
+  const handleAddToInventory = (e) => {
+    e.preventDefault();
+  };
+
   const wrapperRef = useRef(null);
   useOutsideClick(wrapperRef, setDisplayPrompt);
 
+  console.log(list);
   return (
     <div className="bg-stone-100 dark:bg-stone-800 w-11/12 mx-auto sm:w-3/5 mt-8 shadow shadow-black px-4 py-6 dark:text-white">
       {isLoading ? (
@@ -116,11 +121,16 @@ const List = (props) => {
           </span>
           <div className="flex flex-col mt-2">
             <span className="flex justify-center">
-              <button className="bg-emerald-300 dark:bg-emerald-800 px-4 border-2 border-zinc-200 dark:border-zinc-600 shadow shadow-black mt-4 mr-4">
+              <button
+                type="submit"
+                onClick={(e) => handleAddToInventory(e)}
+                className="bg-emerald-300 dark:bg-emerald-800 px-4 border-2 border-zinc-200 dark:border-zinc-600 shadow shadow-black mt-4 mr-4"
+              >
                 Add to Inventory
               </button>
               <button
                 onClick={() => setDisplayPrompt(false)}
+                type="button"
                 className="bg-sky-300 dark:bg-sky-700 px-4 border-2 border-zinc-200 dark:border-zinc-600 shadow shadow-black mt-4"
               >
                 Skip
@@ -159,9 +169,14 @@ const List = (props) => {
             ))
           : ""}
       </ul>
-      <button className="bg-emerald-300 px-4 border-2 border-zinc-200 shadow shadow-black mt-4 text-black font-semibold">
-        Complete
-      </button>
+      <span className="flex justify-between">
+        <button className="bg-sky-300 px-4 border-2 border-zinc-200 shadow shadow-black mt-4 text-black font-semibold">
+          Add Item
+        </button>
+        <button className="bg-emerald-300 px-4 border-2 border-zinc-200 shadow shadow-black mt-4 text-black font-semibold">
+          Complete
+        </button>
+      </span>
     </div>
   );
 };

@@ -9,7 +9,18 @@ const Menu = (props) => {
           : "hidden"
       }
     >
-      {props.user.admin ? <Link to="/admin">Admin Dashboard</Link> : ""}
+      {props.user.admin ? (
+        <Link
+          onClick={() => {
+            props.setMenuOpen(false);
+          }}
+          to="/admin"
+        >
+          Admin Dashboard
+        </Link>
+      ) : (
+        ""
+      )}
       <Link
         to="/meal_plan"
         onClick={() => {

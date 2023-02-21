@@ -1,5 +1,8 @@
 const express = require("express");
-const { addIngredientToList } = require("../db/ingredients");
+const {
+  addIngredientToList,
+  updateListIngredientQty,
+} = require("../db/ingredients");
 const {
   createList,
   getList,
@@ -44,7 +47,19 @@ router.post(
         });
       }
 
-      const { ingredientId, qty, unit } = req.body;
+      let { ingredientId, qty, unit } = req.body;
+
+      for (let ingredient of list.ingredients) {
+        if (ingredient.ingredientId === ingredientId) {
+          qty = qty + ingredient.qty;
+          const updated = await updateListIngredientQty({
+            id: ingredient.id,
+            qty,
+          });
+          return res.send(updated);
+        }
+      }
+
       const listIngredient = await addIngredientToList({
         listId,
         ingredientId,

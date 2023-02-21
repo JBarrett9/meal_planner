@@ -119,10 +119,10 @@ const IngredientQuery = (props) => {
       </span>
       <ul className="flex flex-wrap">
         {isLoading ? (
-          <div class="flex mx-auto w-full mt-4 items-center justify-center space-x-2">
-            <div class="w-4 h-4 bg-sky-400 rounded-full animate-bounce delay-1000"></div>
-            <div class="w-4 h-4 bg-sky-400 rounded-full animate-bounce"></div>
-            <div class="w-4 h-4 bg-sky-400 rounded-full animate-bounce delay-1000"></div>
+          <div className="flex mx-auto w-full mt-4 items-center justify-center space-x-2">
+            <div className="w-4 h-4 bg-sky-400 rounded-full animate-bounce delay-1000"></div>
+            <div className="w-4 h-4 bg-sky-400 rounded-full animate-bounce"></div>
+            <div className="w-4 h-4 bg-sky-400 rounded-full animate-bounce delay-1000"></div>
           </div>
         ) : (
           ""

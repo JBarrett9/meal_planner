@@ -197,7 +197,7 @@ const populate = async () => {
   });
 
   const celery = await createIngredient({
-    name: "onion",
+    name: "celery",
     conversion: 101,
     calories: 16,
     type: "vegetable",
@@ -221,7 +221,7 @@ const populate = async () => {
   });
 
   const flour = await createIngredient({
-    name: "onion",
+    name: "flour",
     conversion: 455,
     calories: 125,
     type: "grain",

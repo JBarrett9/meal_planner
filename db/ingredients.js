@@ -191,6 +191,20 @@ const updateIngredient = async ({ id, ...fields }) => {
   }
 };
 
+const updateListIngredientQty = async ({ id, qty }) => {
+  try {
+    const {
+      rows: [listIngredient],
+    } = await client.query(
+      `UPDATE list_ingredients "qty"=$1 WHERE id=$2 RETURNING *;`,
+      [qty, id]
+    );
+    return listIngredient;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   addIngredientToInventory,
   addIngredientToList,
@@ -203,4 +217,5 @@ module.exports = {
   removeIngredientFromList,
   removeIngredientFromRecipe,
   updateIngredient,
+  updateListIngredientQty,
 };

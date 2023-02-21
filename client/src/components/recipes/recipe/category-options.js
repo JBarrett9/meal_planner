@@ -28,7 +28,7 @@ const CategoryOptions = (props) => {
           <button
             onClick={handleRemove}
             type="submit"
-            class="material-symbols-outlined text-red-700 dark:text-red-300"
+            className="material-symbols-outlined text-red-700 dark:text-red-300"
           >
             close
           </button>

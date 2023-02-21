@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { createCategory, getCategoriesByQuery } from "../../../api/categories";
+import { addIngredientToList, fetchAccountLists } from "../../../api/lists";
 import { addRecipeToMeal, createMeal } from "../../../api/meals";
 import {
   addCategoryToRecipe,
@@ -23,6 +24,9 @@ const Recipe = (props) => {
   const [displayCategorySelect, setDisplayCategorySelect] = useState(false);
   const [queriedCategories, setQueriedCategories] = useState([]);
   const [categorySearch, setCategorySearch] = useState("");
+  const [displayListSelect, setDisplayListSelect] = useState(false);
+  const [lists, setLists] = useState([]);
+  const [list, setList] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -80,12 +84,27 @@ const Recipe = (props) => {
     handleCategorySelect(newCategory);
   };
 
+  const getLists = async () => {
+    const data = await fetchAccountLists(props.token);
+    setLists(data);
+  };
+  const handleAddToList = async (e) => {
+    e.preventDefault();
+    for (let ingredient of recipe.ingredients) {
+      await addIngredientToList();
+    }
+  };
+
   const wrapperRef = useRef(null);
   const wrapperRef2 = useRef(null);
   const wrapperRef3 = useRef(null);
+  const wrapperRef4 = useRef(null);
   useOutsideClick(wrapperRef, setDisplayDeleteConfirmation);
   useOutsideClick(wrapperRef2, setDisplayDateSelect);
   useOutsideClick(wrapperRef3, setDisplayCategorySelect);
+  useOutsideClick(wrapperRef4, setDisplayListSelect);
+
+  console.log(lists);
 
   return (
     <div className="bg-stone-100 dark:bg-stone-800 w-11/12 mx-auto sm:w-3/5 mt-8 shadow shadow-black px-4 py-6 dark:text-white">
@@ -113,7 +132,12 @@ const Recipe = (props) => {
                   calendar_add_on
                 </span>
               </Link>
-              <Link>
+              <Link
+                onClick={() => {
+                  getLists();
+                  setDisplayListSelect(true);
+                }}
+              >
                 <span class="material-symbols-outlined text-fuchsia-700 dark:text-fuchsia-400">
                   playlist_add
                 </span>
@@ -160,6 +184,14 @@ const Recipe = (props) => {
                 Add
               </button>
             </div>
+          ) : (
+            ""
+          )}
+          {displayListSelect ? (
+            <div
+              ref={wrapperRef4}
+              className="absolute h-48 w-80 px-4 bg-white left-1/2 -ml-40 shadow-lg shadow-black dark:bg-zinc-800"
+            ></div>
           ) : (
             ""
           )}

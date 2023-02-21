@@ -7,6 +7,32 @@ const {
 const router = express.Router();
 const { requireUser } = require("./utils");
 
+router.get("/list", async (req, res, next) => {
+  try {
+    const qs = req.query.search.toLowerCase();
+    const page = req.query.page;
+    const limit = page * 12;
+    const allIngredients = await getAllIngredients();
+    const ingredients = allIngredients
+      .filter((ingredient) => ingredient.name.includes(qs.toLowerCase()))
+      .sort((a, b) => {
+        const nameA = a.name.toLowerCase();
+        const nameB = b.name.toLowerCase();
+        if (nameA > nameB) {
+          return 1;
+        }
+        if (nameA < nameB) {
+          return -1;
+        }
+
+        return 0;
+      });
+    res.send(ingredients.splice(limit - 12, limit));
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/query", async (req, res, next) => {
   try {
     const qs = req.query.search;
