@@ -1,3 +1,5 @@
+import { BASE_URL } from ".";
+
 const createIngredient = async ({
   token,
   name,
@@ -7,7 +9,7 @@ const createIngredient = async ({
   nutrition,
 }) => {
   try {
-    const response = await fetch(`/api/ingredients`, {
+    const response = await fetch(`${BASE_URL}/api/ingredients`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,7 +33,7 @@ const createIngredient = async ({
 
 const fetchIngredients = async (query, page) => {
   try {
-    let url = `/api/ingredients/list?search=${query}&page=${page}`;
+    let url = `${BASE_URL}/api/ingredients/list?search=${query}&page=${page}`;
 
     const response = await fetch(url, {
       headers: {
@@ -48,7 +50,7 @@ const fetchIngredients = async (query, page) => {
 
 const getIngredientsByQuery = async (query) => {
   try {
-    let url = `/api/ingredients/query?search=`;
+    let url = `${BASE_URL}/api/ingredients/query?search=`;
     if (query) {
       url = url + query;
     }

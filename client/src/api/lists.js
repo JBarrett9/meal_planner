@@ -1,3 +1,5 @@
+import { BASE_URL } from ".";
+
 const addIngredientToList = async ({
   token,
   listId,
@@ -6,18 +8,21 @@ const addIngredientToList = async ({
   unit,
 }) => {
   try {
-    const response = await fetch(`/api/lists/list/${listId}/ingredients`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        ingredientId,
-        qty,
-        unit,
-      }),
-    });
+    const response = await fetch(
+      `${BASE_URL}/api/lists/list/${listId}/ingredients`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ingredientId,
+          qty,
+          unit,
+        }),
+      }
+    );
     const result = response.json();
     return result;
   } catch (error) {
@@ -27,7 +32,7 @@ const addIngredientToList = async ({
 
 const createList = async ({ token, name }) => {
   try {
-    const response = await fetch(`/api/lists/account`, {
+    const response = await fetch(`${BASE_URL}/api/lists/account`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +52,7 @@ const createList = async ({ token, name }) => {
 
 const fetchAccountLists = async (token) => {
   try {
-    const response = await fetch(`/api/lists/account`, {
+    const response = await fetch(`${BASE_URL}/api/lists/account`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -64,7 +69,7 @@ const fetchAccountLists = async (token) => {
 
 const fetchList = async ({ token, listId }) => {
   try {
-    const response = await fetch(`/api/lists/list/${listId}`, {
+    const response = await fetch(`${BASE_URL}/api/lists/list/${listId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

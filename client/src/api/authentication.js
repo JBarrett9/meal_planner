@@ -1,6 +1,8 @@
+import { BASE_URL } from ".";
+
 const getUser = async (token) => {
   try {
-    const response = await fetch(`/api/users/me`, {
+    const response = await fetch(`${BASE_URL}/api/users/me`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -16,7 +18,7 @@ const getUser = async (token) => {
 
 const login = async ({ email, password }) => {
   try {
-    const response = await fetch(`/api/users/login`, {
+    const response = await fetch(`${BASE_URL}/api/users/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,9 +36,9 @@ const login = async ({ email, password }) => {
   }
 };
 
-const register = async ({ email, password, name }) => {
+const register = async ({ email, password, name, recaptchaResponse }) => {
   try {
-    const response = await fetch(`/api/users/register`, {
+    const response = await fetch(`${BASE_URL}/api/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,6 +47,7 @@ const register = async ({ email, password, name }) => {
         email,
         password,
         name,
+        recaptchaResponse,
       }),
     });
 
@@ -57,7 +60,7 @@ const register = async ({ email, password, name }) => {
 
 const registerToAccount = async ({ email, password, name, accountId }) => {
   try {
-    const response = await fetch(`/api/users/register`, {
+    const response = await fetch(`${BASE_URL}/api/users/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

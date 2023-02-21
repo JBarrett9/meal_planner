@@ -1,15 +1,20 @@
+import { BASE_URL } from ".";
+
 const addCategoryToRecipe = async ({ token, recipeId, categoryId }) => {
   try {
-    const response = await fetch(`/api/recipes/recipe/${recipeId}/categories`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        categoryId,
-      }),
-    });
+    const response = await fetch(
+      `${BASE_URL}/api/recipes/recipe/${recipeId}/categories`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          categoryId,
+        }),
+      }
+    );
 
     const result = response.json();
     return result;
@@ -29,7 +34,7 @@ const createRecipe = async ({
   categories,
 }) => {
   try {
-    const response = await fetch(`/api/recipes`, {
+    const response = await fetch(`${BASE_URL}/api/recipes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +52,7 @@ const createRecipe = async ({
     const result = await response.json();
 
     for (let ingredient of ingredients) {
-      await fetch(`/api/recipes/recipe/${result.id}/ingredients`, {
+      await fetch(`${BASE_URL}/api/recipes/recipe/${result.id}/ingredients`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +68,7 @@ const createRecipe = async ({
     }
 
     for (let category of categories) {
-      await fetch(`/api/recipes/recipe/${result.id}/categories`, {
+      await fetch(`${BASE_URL}/api/recipes/recipe/${result.id}/categories`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,7 +89,7 @@ const createRecipe = async ({
 
 const deleteRecipe = async ({ token, recipeId }) => {
   try {
-    const response = await fetch(`/api/recipes/recipe/${recipeId}`, {
+    const response = await fetch(`${BASE_URL}/api/recipes/recipe/${recipeId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -101,7 +106,7 @@ const deleteRecipe = async ({ token, recipeId }) => {
 
 const fetchRecipe = async ({ token, recipeId }) => {
   try {
-    const response = await fetch(`/api/recipes/recipe/${recipeId}`, {
+    const response = await fetch(`${BASE_URL}/api/recipes/recipe/${recipeId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -119,7 +124,7 @@ const fetchRecipe = async ({ token, recipeId }) => {
 const fetchAccountRecipes = async (token, query, page) => {
   try {
     const response = await fetch(
-      `/api/recipes/account?search=${query}&page=${page}`,
+      `${BASE_URL}/api/recipes/account?search=${query}&page=${page}`,
       {
         method: "GET",
         headers: {
@@ -139,7 +144,7 @@ const fetchAccountRecipes = async (token, query, page) => {
 const fetchStep = async ({ token, recipeId, step }) => {
   try {
     const response = await fetch(
-      `/api/recipes/recipe/${recipeId}/step_view?step=${step}`,
+      `${BASE_URL}/api/recipes/recipe/${recipeId}/step_view?step=${step}`,
       {
         method: "GET",
         headers: {
@@ -159,7 +164,7 @@ const fetchStep = async ({ token, recipeId, step }) => {
 const removeCategoryFromRecipe = async ({ token, recicpeCategoryId }) => {
   try {
     const response = await fetch(
-      `/api/recipes/recipe_category/${recicpeCategoryId}`,
+      `${BASE_URL}/api/recipes/recipe_category/${recicpeCategoryId}`,
       {
         method: "DELETE",
         headers: {

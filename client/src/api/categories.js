@@ -1,6 +1,8 @@
+import { BASE_URL } from ".";
+
 const createCategory = async ({ token, name }) => {
   try {
-    const response = await fetch(`/api/categories`, {
+    const response = await fetch(`${BASE_URL}/api/categories`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -20,7 +22,7 @@ const createCategory = async ({ token, name }) => {
 
 const getCategoriesByQuery = async (query) => {
   try {
-    let url = `/api/categories/query?search=`;
+    let url = `${BASE_URL}/api/categories/query?search=`;
     if (query) {
       url = url + query;
     }
