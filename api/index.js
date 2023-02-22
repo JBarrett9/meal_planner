@@ -15,9 +15,7 @@ router.use(async (req, res, next) => {
     let token = auth.slice(prefix.length);
 
     try {
-      const { id } = jwt.verify(token, JWT_SECRET, (err) => {
-        if (err) return res.sendStatus(403);
-      });
+      const { id } = jwt.verify(token, JWT_SECRET);
 
       if (id) {
         req.user = await getUserById(id);

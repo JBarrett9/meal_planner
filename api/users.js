@@ -79,13 +79,11 @@ router.post("/register", async (req, res, next) => {
   let { email, password, name, accountId, recaptchaResponse } = req.body;
   const human = await validateRecaptcha(recaptchaResponse);
   if (!human) {
-    return res
-      .status(401)
-      .send({
-        error: "reCaptchaFailedError",
-        name: "reCaptchaFailedError",
-        message: `Could not verify that the user is human`,
-      });
+    return res.status(401).send({
+      error: "reCaptchaFailedError",
+      name: "reCaptchaFailedError",
+      message: `Could not verify that the user is human`,
+    });
   }
   const _user = await getUserByEmail(email);
   if (_user) {

@@ -12,7 +12,13 @@ const Inventory = (props) => {
 
     getInventory();
   }, []);
-  return <div></div>;
+
+  console.log(inventory);
+  return (
+    <div>
+      <h1>Hello Inventory</h1>
+    </div>
+  );
 };
 
 export default Inventory;

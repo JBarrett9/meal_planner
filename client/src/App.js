@@ -4,6 +4,7 @@ import { getUser } from "./api/authentication";
 import { Dashboard } from "./components/admin";
 import Footer from "./components/footer/footer";
 import Home from "./components/home/home";
+import Inventory from "./components/inventory/inventory";
 import Lists from "./components/lists/lists";
 import MealPlan from "./components/meal-plan/meal-plan";
 import Menu from "./components/navbar/menu";
@@ -65,6 +66,10 @@ function App() {
               element={<Register setToken={setToken} setUser={setUser} />}
             ></Route>
           </Route>
+          <Route
+            path="/inventory/*"
+            element={<Inventory token={token} />}
+          ></Route>
           <Route
             path="/recipes/*"
             element={<Recipes user={user} token={token} />}

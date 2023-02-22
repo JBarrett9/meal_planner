@@ -4,14 +4,6 @@ const { getInventory } = require("../db/inventories");
 const router = express.Router();
 const { requireUser } = require("./utils");
 
-router.post("/", requireUser, async (req, res, next) => {
-  const { accountId } = req.body;
-  try {
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.get("/", requireUser, async (req, res, next) => {
   const { accountId } = req.user.accountId;
   try {

@@ -36,6 +36,7 @@ const IngredientQuery = (props) => {
       token: props.token,
       name: ingredientSearch,
     });
+    console.log(newIngredient);
     handleSubmit(newIngredient);
   };
 
