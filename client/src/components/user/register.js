@@ -5,7 +5,6 @@ import { register } from "../../api/authentication";
 import FormInput from "../inputs/form-input";
 
 const Register = (props) => {
-  // 6LdrVVIkAAAAAMNZ0wwI0WEfLCMaIGVEVdvGhBLB
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,7 +23,7 @@ const Register = (props) => {
       name,
       recaptchaResponse,
     });
-    console.log(response);
+
     if (response.success) {
       localStorage.setItem("jwt", response.token);
       props.setToken(response.token);
@@ -70,7 +69,7 @@ const Register = (props) => {
         />
         <span className="flex justify-center mt-4">
           <ReCAPTCHA
-            sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+            sitekey="6LdrVVIkAAAAAMNZ0wwI0WEfLCMaIGVEVdvGhBLB"
             onChange={handleReCAPTCHAChange}
           />
         </span>

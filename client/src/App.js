@@ -80,7 +80,10 @@ function App() {
           ></Route>
           <Route path="/meal_plan" element={<MealPlan token={token} />}></Route>
           {user.admin ? (
-            <Route path="/admin/*" element={<Dashboard user={user} />}></Route>
+            <Route
+              path="/admin/*"
+              element={<Dashboard user={user} token={token} />}
+            ></Route>
           ) : (
             <></>
           )}

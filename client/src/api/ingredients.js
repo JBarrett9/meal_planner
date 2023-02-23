@@ -68,4 +68,29 @@ const getIngredientsByQuery = async (query) => {
   }
 };
 
-export { createIngredient, fetchIngredients, getIngredientsByQuery };
+const updateIngredient = async ({ token, ingredientId, fields }) => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/api/ingredients/ingredient/${ingredientId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(fields),
+      }
+    );
+    const result = response.json();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export {
+  createIngredient,
+  fetchIngredients,
+  getIngredientsByQuery,
+  updateIngredient,
+};

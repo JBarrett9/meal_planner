@@ -9,7 +9,7 @@ const addIngredientToInventory = async ({
 }) => {
   try {
     const response = await fetch(
-      `/api/inventories/${inventoryId}/ingredients`,
+      `${BASE_URL}/api/inventories/${inventoryId}/ingredients`,
       {
         method: "POST",
         headers: {

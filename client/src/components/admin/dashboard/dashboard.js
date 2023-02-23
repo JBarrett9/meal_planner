@@ -9,7 +9,10 @@ const Dashboard = (props) => {
       <AdminNav />
       <Routes>
         <Route path="/users" element={<Users />} />
-        <Route path="/ingredients" element={<Ingredients />} />
+        <Route
+          path="/ingredients"
+          element={<Ingredients token={props.token} />}
+        />
         <Route path="/categories" />
         <Route path="/recipes" />
       </Routes>

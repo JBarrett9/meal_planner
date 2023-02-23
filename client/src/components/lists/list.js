@@ -46,7 +46,6 @@ const List = (props) => {
   const wrapperRef = useRef(null);
   useOutsideClick(wrapperRef, setDisplayPrompt);
 
-  console.log(list);
   return (
     <div className="bg-stone-100 dark:bg-stone-800 w-11/12 mx-auto sm:w-3/5 mt-8 shadow shadow-black px-4 py-6 dark:text-white">
       {isLoading ? (

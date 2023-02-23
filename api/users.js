@@ -164,8 +164,8 @@ router.patch("/admin/user/:userId", requireAdmin, async (req, res, next) => {
 
 router.patch("/:userId", requireUser, async (req, res, next) => {
   const { userId } = req.params;
-  const { name, password } = req.body;
-  let updateFields = { name, password };
+  const { name, password, accountId } = req.body;
+  let updateFields = { name, password, accountId };
   Object.keys(updateFields).forEach(function (key, idx) {
     if (updateFields[key] === undefined) {
       delete updateFields[key];

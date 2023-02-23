@@ -14,11 +14,7 @@ const Inventory = (props) => {
   }, []);
 
   console.log(inventory);
-  return (
-    <div>
-      <h1>Hello Inventory</h1>
-    </div>
-  );
+  return <div></div>;
 };
 
 export default Inventory;

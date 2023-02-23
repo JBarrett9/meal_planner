@@ -16,6 +16,25 @@ const getUser = async (token) => {
   }
 };
 
+const loginWithGoogle = async (res) => {
+  try {
+    const response = await fetch(`/api/google-login`, {
+      method: "POST",
+      body: JSON.stringify({
+        token: res.credential,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const login = async ({ email, password }) => {
   try {
     const response = await fetch(`${BASE_URL}/api/users/login`, {
@@ -80,4 +99,4 @@ const registerToAccount = async ({ email, password, name, accountId }) => {
   }
 };
 
-export { getUser, login, register, registerToAccount };
+export { getUser, loginWithGoogle, login, register, registerToAccount };

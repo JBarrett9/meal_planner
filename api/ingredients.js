@@ -3,9 +3,10 @@ const {
   getAllIngredients,
   getIngredientById,
   createIngredient,
+  updateIngredient,
 } = require("../db/ingredients");
 const router = express.Router();
-const { requireUser } = require("./utils");
+const { requireUser, requireAdmin } = require("./utils");
 
 router.get("/list", async (req, res, next) => {
   try {
@@ -55,6 +56,40 @@ router.get("/ingredient/:ingredientId", async (req, res, next) => {
     next(error);
   }
 });
+
+router.patch(
+  "/ingredient/:ingredientId",
+  requireAdmin,
+  async (req, res, next) => {
+    const ingredientId = req.params;
+    try {
+      const { name, conversion, calories, type, nutrition, creatorId } =
+        req.body;
+      const updateFields = {
+        name,
+        conversion,
+        calories,
+        type,
+        nutrition,
+        creatorId,
+      };
+      Object.keys(updateFields).forEach(function (key, idx) {
+        if (updateFields[key] === undefined) {
+          delete updateFields[key];
+        }
+      });
+
+      const updated = await updateIngredient({
+        id: ingredientId,
+        ...updateFields,
+      });
+
+      res.send(updated);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 router.post("/", requireUser, async (req, res, next) => {
   const { id: creatorId } = req.user;
