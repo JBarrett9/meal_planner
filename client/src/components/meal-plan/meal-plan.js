@@ -67,7 +67,7 @@ const MealPlan = (props) => {
   useOutsideClick(wrapperRef2, setMealDisplay);
 
   return (
-    <span className="flex flex-wrap mx-auto w-11/12 lg:w-max dark:text-white">
+    <span className="flex flex-wrap mx-auto mt-4 w-11/12 lg:w-max dark:text-white">
       <div ref={wrapperRef}>
         {displayForm ? (
           <div className="absolute pb-6 w-80 px-4 bg-stone-200 left-1/2 -ml-40 shadow-lg shadow-black dark:bg-zinc-800">

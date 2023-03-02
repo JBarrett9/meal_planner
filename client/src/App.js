@@ -44,7 +44,7 @@ function App() {
 
   return (
     <>
-      <div className="min-h-screen pb-24">
+      <div className="min-h-screen pb-24 bg-zinc-600 dark:bg-stone-600">
         <div ref={wrapperRef}>
           <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} token={token} />
           <Menu

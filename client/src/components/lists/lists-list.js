@@ -20,7 +20,7 @@ const ListsList = (props) => {
 
   return (
     <div>
-      <nav className="w-full py-2 flex-col bg-slate-200 dark:bg-stone-700 dark:text-stone-50 shadow shadow-black dark:border-none mb-4">
+      <nav className="w-full py-2 flex-col bg-white dark:bg-stone-700 dark:text-stone-50 shadow shadow-black dark:border-none mb-4">
         <span className="flex mb-2">
           <NavLink
             end
@@ -62,7 +62,7 @@ const ListsList = (props) => {
             type="text"
             value={keywords}
             onChange={(e) => setKeywords(e.target.value)}
-            className="border border-black"
+            className="grow px-2 border-l border-b border-solid border-black text-sm text-black"
           />
         </span>
       </nav>
@@ -79,7 +79,7 @@ const ListsList = (props) => {
         {lists.length > 0 ? (
           lists.map((list) => (
             <Link key={list.id} to={`/lists/list/${list.id}`}>
-              <li className="mt-4 text-lg bg-purple-300 dark:bg-gray-800 dark:text-stone-300 py-2 px-4">
+              <li className="mt-4 text-lg font-semibold border-t border-stone-800 shadow shadow-black bg-purple-400/75 dark:bg-gray-800 dark:text-stone-300 py-2 px-4">
                 {list.name}
               </li>
             </Link>

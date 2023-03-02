@@ -6,7 +6,7 @@ const Navbar = (props) => {
 
   return (
     <header
-      className="flex justify-between flex-wrap mb-4"
+      className="flex justify-between flex-wrap bg-stone-100 dark:bg-stone-600 pb-4"
       onClick={() => {
         if (props.menuOpen) props.setMenuOpen(false);
       }}

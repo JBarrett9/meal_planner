@@ -23,6 +23,24 @@ const RecipeForm = (props) => {
     setStep("");
   };
 
+  const removeCategory = (idx) => {
+    let temp = [...categories];
+    temp.splice(idx, 1);
+    setCategories(temp);
+  };
+
+  const removeStep = (idx) => {
+    let temp = [...steps];
+    temp.splice(idx, 1);
+    setSteps(temp);
+  };
+
+  const updateStep = (value, idx) => {
+    let temp = [...steps];
+    temp[idx] = value;
+    setSteps(temp);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const recipe = await createRecipe({
@@ -87,7 +105,25 @@ const RecipeForm = (props) => {
       </span>
       <span className="mt-4">
         <label>Steps: </label>
-        <FormList items={steps} setItems={setSteps} />
+        <ol className="list-decimal ml-4">
+          {steps.map((step, idx) => (
+            <li key={idx}>
+              <input
+                type="text"
+                value={steps[idx]}
+                onChange={(e) => updateStep(e.target.value, idx)}
+                className="dark:bg-stone-800"
+              />
+              <button
+                type="button"
+                className="border border-black ml-1 bg-red-500 text-white px-1 text-xs"
+                onClick={() => removeStep(idx)}
+              >
+                X
+              </button>
+            </li>
+          ))}
+        </ol>
       </span>
       <span className="flex mt-4">
         <input
@@ -105,7 +141,20 @@ const RecipeForm = (props) => {
       </span>
       <span className="mt-4">
         <label>Categories: </label>
-        <FormList items={categories} setItems={setCategories} />
+        <ul className="ml-4 flex flex-wrap">
+          {categories.map((category, idx) => (
+            <li key={idx} className="mr-4">
+              {category.name}{" "}
+              <button
+                type="button"
+                className="border border-black ml-1 bg-red-500 text-white px-1 text-xs"
+                onClick={() => removeCategory(idx)}
+              >
+                X
+              </button>
+            </li>
+          ))}
+        </ul>
         <CategoryQuery
           categories={categories}
           setCategories={setCategories}

@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 const RecipeNav = () => {
   return (
-    <nav className="w-full bg-blue-300 shadow shadow-black dark:bg-stone-800 py-4 text-stone-800 font-semibold dark:text-stone-50 flex">
+    <nav className="w-full bg-emerald-400 shadow shadow-black dark:bg-stone-800 py-4 text-stone-800 font-semibold dark:text-stone-50 flex border-y border-black ">
       <NavLink
         end
         to="/recipes"

@@ -16,7 +16,7 @@ const IngredientQuery = (props) => {
       const ingredients = await getIngredientsByQuery(ingredientSearch);
       setIsLoading(false);
       setQueriedIngredients(ingredients);
-    }, 1000);
+    }, 800);
 
     setIsLoading(true);
     return () => clearTimeout(delay);
