@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.587f8969.css",
-    "main.js": "/static/js/main.1761851c.js",
+    "main.css": "/static/css/main.56f3bbc7.css",
+    "main.js": "/static/js/main.d5a4d398.js",
     "static/media/clock-alarm-8761.mp3": "/static/media/clock-alarm-8761.6c19b7b9a533c76b395a.mp3",
     "static/media/mealplanlogo.png": "/static/media/mealplanlogo.c359d07fd77cf41c6858.png",
     "index.html": "/index.html",
-    "main.587f8969.css.map": "/static/css/main.587f8969.css.map",
-    "main.1761851c.js.map": "/static/js/main.1761851c.js.map"
+    "main.56f3bbc7.css.map": "/static/css/main.56f3bbc7.css.map",
+    "main.d5a4d398.js.map": "/static/js/main.d5a4d398.js.map"
   },
   "entrypoints": [
-    "static/css/main.587f8969.css",
-    "static/js/main.1761851c.js"
+    "static/css/main.56f3bbc7.css",
+    "static/js/main.d5a4d398.js"
   ]
 }
