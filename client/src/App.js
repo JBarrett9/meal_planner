@@ -68,7 +68,7 @@ function App() {
           </Route>
           <Route
             path="/inventory/*"
-            element={<Inventory token={token} />}
+            element={<Inventory user={user} token={token} />}
           ></Route>
           <Route
             path="/recipes/*"

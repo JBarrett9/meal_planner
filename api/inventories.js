@@ -5,9 +5,11 @@ const router = express.Router();
 const { requireUser } = require("./utils");
 
 router.get("/", requireUser, async (req, res, next) => {
-  const { accountId } = req.user.accountId;
+  const { accountId } = req.user;
+
   try {
     const inventory = await getInventory(accountId);
+
     res.send(inventory);
   } catch (error) {
     next(error);
