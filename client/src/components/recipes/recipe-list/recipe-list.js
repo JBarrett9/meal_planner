@@ -43,7 +43,7 @@ const RecipeList = (props) => {
         {recipes.length > 0 ? (
           recipes.map((recipe) => (
             <Link key={recipe.id} to={`/recipes/recipe/${recipe.id}`}>
-              <li className="mt-4 text-lg font-semibold border-t border-stone-800 shadow shadow-black bg-purple-500/75 dark:bg-gray-800 dark:text-stone-300 py-2 px-4">
+              <li className="mt-4 text-lg font-semibold border-t border-stone-800 shadow shadow-black bg-purple-400/75 dark:bg-gray-800 dark:text-stone-300 py-2 px-4">
                 {recipe.name}
               </li>
             </Link>

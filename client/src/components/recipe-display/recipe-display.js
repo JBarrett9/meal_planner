@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { fetchStep } from "../../api/recipes";
 import Timer from "../timer/timer";
 
@@ -11,6 +11,7 @@ const RecipeDisplay = (props) => {
   const [minutes, setMinutes] = useState("00");
   const [hours, setHours] = useState("00");
   const [ingredients, setIngredients] = useState([]);
+  const [displayTimer, setDisplayTimer] = useState(false);
 
   const { recipeId } = useParams();
 
@@ -19,8 +20,6 @@ const RecipeDisplay = (props) => {
       const data = await fetchStep({ token: props.token, recipeId, step });
       setIngredients(data.ingredients);
       setLimit(data.limit);
-
-      console.log(data);
 
       if (step > 0) {
         setCurrent(data.current);
@@ -61,10 +60,29 @@ const RecipeDisplay = (props) => {
           </ul>
         </div>
       ) : (
-        <>
-          <Timer hours={hours} minutes={minutes} seconds={seconds} />
-          <p className="mb-4 mx-2">{current}</p>
-        </>
+        <div>
+          {displayTimer ? (
+            <span className="flex justify-around items-center">
+              <Timer hours={hours} minutes={minutes} seconds={seconds} />
+              <button
+                onClick={() => setDisplayTimer(!displayTimer)}
+                className="material-symbols-outlined"
+              >
+                close
+              </button>
+            </span>
+          ) : (
+            <Link
+              className="flex justify-center"
+              onClick={() => setDisplayTimer(!displayTimer)}
+            >
+              <span className="material-symbols-outlined text-yellow-900 dark:text-yellow-400">
+                timer
+              </span>
+            </Link>
+          )}
+          <p>{current}</p>
+        </div>
       )}
     </div>
   );

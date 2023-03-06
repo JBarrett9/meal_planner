@@ -104,8 +104,6 @@ const Recipe = (props) => {
   useOutsideClick(wrapperRef3, setDisplayCategorySelect);
   useOutsideClick(wrapperRef4, setDisplayListSelect);
 
-  console.log(lists);
-
   return (
     <div className="bg-stone-100 dark:bg-stone-800 w-11/12 mx-auto sm:w-3/5 mt-8 shadow shadow-black px-4 py-6 dark:text-white">
       {recipe && recipe.name ? (
@@ -138,7 +136,7 @@ const Recipe = (props) => {
                   setDisplayListSelect(true);
                 }}
               >
-                <span class="material-symbols-outlined text-fuchsia-700 dark:text-fuchsia-400">
+                <span className="material-symbols-outlined text-fuchsia-700 dark:text-fuchsia-400">
                   playlist_add
                 </span>
               </Link>
@@ -230,7 +228,7 @@ const Recipe = (props) => {
             >
               <span
                 onClick={() => setDisplayCategorySelect(false)}
-                class="material-symbols-outlined float-right"
+                className="material-symbols-outlined float-right"
               >
                 close
               </span>
@@ -245,6 +243,7 @@ const Recipe = (props) => {
                   <button
                     onClick={(e) => {
                       addNewCategory(e);
+                      setDisplayCategorySelect(false);
                     }}
                     className="ml-4 bg-sky-100 dark:bg-teal-600 px-2 border border-black font-semibold text-xl"
                   >
@@ -304,7 +303,7 @@ const Recipe = (props) => {
             <span className="flex justify-between">
               <h3>Categories</h3>
               <Link onClick={() => setDisplayCategorySelect(true)}>
-                <span class="material-symbols-outlined text-emerald-700 dark:text-teal-300">
+                <span className="material-symbols-outlined text-emerald-700 dark:text-teal-300">
                   add
                 </span>
               </Link>
@@ -312,7 +311,11 @@ const Recipe = (props) => {
             <span className="flex justify-around items-center flex-wrap">
               {recipe.categories
                 ? recipe.categories.map((category) => (
-                    <CategoryOptions category={category} token={props.token} />
+                    <CategoryOptions
+                      key={category.id}
+                      category={category}
+                      token={props.token}
+                    />
                   ))
                 : ""}
             </span>

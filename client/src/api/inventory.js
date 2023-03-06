@@ -33,7 +33,7 @@ const addIngredientToInventory = async ({
 
 const fetchInventory = async (token) => {
   try {
-    const response = await fetch(`/api/inventories`, {
+    const response = await fetch(`${BASE_URL}/api/inventories`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
