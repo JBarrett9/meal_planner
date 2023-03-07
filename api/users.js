@@ -223,6 +223,16 @@ router.patch("/:userId", requireUser, async (req, res, next) => {
   }
 });
 
+router.get("/me/google", (req, res) => {
+  if (req.user) {
+    res.status(200).json({
+      success: true,
+      message: "successfull",
+      user: req.user,
+    });
+  }
+});
+
 router.get("/me", requireUser, async (req, res) => {
   try {
     const user = req.user;

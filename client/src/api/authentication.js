@@ -16,15 +16,15 @@ const getUser = async (token) => {
   }
 };
 
-const loginWithGoogle = async (res) => {
+const getGoogleUser = async () => {
   try {
-    const response = await fetch(`/api/google-login`, {
-      method: "POST",
-      body: JSON.stringify({
-        token: res.credential,
-      }),
+    const response = await fetch(`${BASE_URL}/api/users/me/google`, {
+      method: "GET",
+      credentials: "include",
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
       },
     });
 
@@ -99,4 +99,4 @@ const registerToAccount = async ({ email, password, name, accountId }) => {
   }
 };
 
-export { getUser, loginWithGoogle, login, register, registerToAccount };
+export { getUser, getGoogleUser, login, register, registerToAccount };
