@@ -5,31 +5,13 @@ const passport = require("passport");
 const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
 const { getUserById } = require("../db/users");
+const { sessionConfig } = require("../db/client");
 
 const { JWT_SECRET } = process.env;
 router.use(express.json());
 
 router.use(passport.initialize());
 router.use(passport.session());
-
-const sessionConfig = {
-  store: new pgSession({
-    pool: client,
-    tableName: "session",
-  }),
-  name: "SID",
-  secret: randomString.generate({
-    length: 14,
-    charset: "alphanumeric",
-  }),
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-    aameSite: true,
-    secure: false, // ENABLE ONLY ON HTTPS
-  },
-};
 
 app.use(session(sessionConfig));
 
@@ -84,7 +66,6 @@ const listsRouter = require("./lists");
 const mealsRouter = require("./meals");
 const recipesRouter = require("./recipes");
 const usersRouter = require("./users");
-const client = require("../db/client");
 
 router.use("/categories", categoriesRouter);
 router.use("/ingredients", ingredientsRouter);

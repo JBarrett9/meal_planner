@@ -17,4 +17,23 @@ const client = new Pool(
       }
 );
 
-module.exports = client;
+const sessionConfig = {
+  store: new pgSession({
+    pool: client,
+    tableName: "session",
+  }),
+  name: "SID",
+  secret: randomString.generate({
+    length: 14,
+    charset: "alphanumeric",
+  }),
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    aameSite: true,
+    secure: false,
+  },
+};
+
+module.exports = { client, sessionConfig };
