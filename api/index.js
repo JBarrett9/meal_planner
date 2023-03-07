@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const passportSetup = require("./passport");
 const passport = require("passport");
 const { getUserById } = require("../db/users");
 
