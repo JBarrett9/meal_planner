@@ -3,8 +3,11 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET, G_SECRET } = process.env;
+const { JWT_SECRET, G_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } =
+  process.env;
 const { requireUser, requireAdmin } = require("./utils");
+var passport = require("passport");
+var GoogleStrategy = require("passport-google-oidc");
 
 const {
   getUserByEmail,
@@ -12,9 +15,22 @@ const {
   getUserById,
   updateUser,
   getAllUsers,
+  verifyGoogleUser,
 } = require("../db/users");
 const { createAccount } = require("../db/accounts");
 const { createInventory, getInventory } = require("../db/inventories");
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env["GOOGLE_CLIENT_ID"],
+      clientSecret: process.env["GOOGLE_CLIENT_SECRET"],
+      callbackURL: "/oauth2/redirect/google",
+      scope: ["profile"],
+    },
+    verifyGoogleUser(issuer, profile, cb)
+  )
+);
 
 const validateRecaptcha = async (response_key) => {
   try {
@@ -133,6 +149,16 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
+router.get("/login/federated/google", passport.authenticate("google"));
+
+router.get(
+  "/oauth2/redirect/google",
+  passport.authenticate("google", {
+    successRedirect: "https://mymealplanet.com",
+    failureRedirect: "https://mymealplanet.com/user/login",
+  })
+);
+
 router.patch("/admin/user/:userId", requireAdmin, async (req, res, next) => {
   const { userId } = req.params;
   const { name, password, admin } = req.body;
@@ -206,9 +232,17 @@ router.get("/me", requireUser, async (req, res) => {
   }
 });
 
-router.get("/all", async (req, res, next) => {
+router.get("/all", requireAdmin, async (req, res, next) => {
   const users = await getAllUsers();
   res.send(users);
+});
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
 });
 
 module.exports = router;

@@ -1,10 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const passportSetup = require("./passport");
+const passport = require("passport");
 const { getUserById } = require("../db/users");
 
 const { JWT_SECRET } = process.env;
 router.use(express.json());
+
+router.use(passport.initialize());
+router.use(passport.session());
 
 router.use(async (req, res, next) => {
   const prefix = "Bearer ";

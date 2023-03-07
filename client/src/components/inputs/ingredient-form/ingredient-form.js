@@ -1,6 +1,7 @@
 import IngredientQuery from "../ingredient-query/ingredient-query";
 
 const IngredientForm = (props) => {
+    
   return (
     <div
       ref={props.wrapperRef}

@@ -12,6 +12,13 @@ const Register = (props) => {
   const [recaptchaResponse, setRecaptchaResponse] = useState("");
   const navigate = useNavigate();
 
+  const googleLogin = () => {
+    window.open(
+      "https://my-meal-planet.onrender.com/api/users/login/federated/google",
+      "_self"
+    );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -84,6 +91,7 @@ const Register = (props) => {
           >
             Sign in
           </Link>
+          <Link onClick={googleLogin}>Sign in with Google</Link>
         </p>
       </form>
     </div>

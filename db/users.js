@@ -114,6 +114,59 @@ const updateUser = async ({ id, ...fields }) => {
   }
 };
 
+const verifyGoogleUser = async (issuer, profile, cb) => {
+  client.query(
+    "SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?",
+    [issuer, profile.id],
+    function (err, row) {
+      if (err) {
+        return cb(err);
+      }
+      if (!row) {
+        client.query(
+          "INSERT INTO users (name) VALUES (?)",
+          [profile.displayName],
+          function (err) {
+            if (err) {
+              return cb(err);
+            }
+
+            var id = this.lastID;
+            client.query(
+              "INSERT INTO federated_credentials (user_id, provider, subject) VALUES (?, ?, ?)",
+              [id, issuer, profile.id],
+              function (err) {
+                if (err) {
+                  return cb(err);
+                }
+                var user = {
+                  id: id,
+                  name: profile.displayName,
+                };
+                return cb(null, user);
+              }
+            );
+          }
+        );
+      } else {
+        client.query(
+          "SELECT * FROM users WHERE id = ?",
+          [row.user_id],
+          function (err, row) {
+            if (err) {
+              return cb(err);
+            }
+            if (!row) {
+              return cb(null, false);
+            }
+            return cb(null, row);
+          }
+        );
+      }
+    }
+  );
+};
+
 module.exports = {
   createUser,
   getAllUsers,
@@ -121,4 +174,5 @@ module.exports = {
   getUserByEmail,
   getUserById,
   updateUser,
+  verifyGoogleUser,
 };
