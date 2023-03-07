@@ -1,6 +1,8 @@
 require("dotenv").config();
 const { Pool } = require("pg");
 const { DB_PASS } = process.env;
+const expressSession = require("express-session");
+const pgSession = require("connect-pg-simple")(expressSession);
 
 const client = new Pool(
   process.env.DATABASE_URL

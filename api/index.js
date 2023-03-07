@@ -3,8 +3,6 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const session = require("express-session");
-const pgSession = require("connect-pg-simple")(session);
-const { getUserById } = require("../db/users");
 const { sessionConfig } = require("../db/client");
 
 const { JWT_SECRET } = process.env;
