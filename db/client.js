@@ -3,6 +3,7 @@ const { Pool } = require("pg");
 const { DB_PASS } = process.env;
 const expressSession = require("express-session");
 const pgSession = require("connect-pg-simple")(expressSession);
+const randomstring = require("randomstring");
 
 const client = new Pool(
   process.env.DATABASE_URL
@@ -25,7 +26,7 @@ const sessionConfig = {
     tableName: "session",
   }),
   name: "SID",
-  secret: randomString.generate({
+  secret: randomstring.generate({
     length: 14,
     charset: "alphanumeric",
   }),
