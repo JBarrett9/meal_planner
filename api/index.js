@@ -8,10 +8,11 @@ const { sessionConfig } = require("../db/client");
 const { JWT_SECRET } = process.env;
 router.use(express.json());
 
+router.use(session(sessionConfig));
+
 router.use(passport.initialize());
 router.use(passport.session());
 
-router.use(session(sessionConfig));
 router.use(passport.authenticate("session"));
 
 router.use(async (req, res, next) => {
