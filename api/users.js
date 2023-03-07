@@ -28,7 +28,7 @@ passport.use(
       callbackURL: "/oauth2/redirect/google",
       scope: ["profile"],
     },
-    verifyGoogleUser(issuer, profile, cb)
+    verifyGoogleUser
   )
 );
 
