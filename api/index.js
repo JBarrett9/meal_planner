@@ -11,17 +11,8 @@ router.use(express.json());
 router.use(passport.initialize());
 router.use(passport.session());
 
-app.use(session(sessionConfig));
-
-app.use(
-  session({
-    secret: "keyboard cat",
-    resave: false,
-    saveUninitialized: false,
-    store: new SQLiteStore({ db: "sessions.db", dir: "./var/db" }),
-  })
-);
-app.use(passport.authenticate("session"));
+router.use(session(sessionConfig));
+router.use(passport.authenticate("session"));
 
 router.use(async (req, res, next) => {
   const prefix = "Bearer ";
