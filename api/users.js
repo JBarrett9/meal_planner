@@ -25,7 +25,7 @@ passport.use(
     {
       clientID: process.env["GOOGLE_CLIENT_ID"],
       clientSecret: process.env["GOOGLE_CLIENT_SECRET"],
-      callbackURL: "/oauth2/redirect/google",
+      callbackURL: "/api/users/oauth2/redirect/google",
       scope: ["profile"],
     },
     verifyGoogleUser
@@ -149,7 +149,10 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-router.get("/login/federated/google", passport.authenticate("google"));
+router.get(
+  "/login/federated/google",
+  passport.authenticate("google", { scope: ["profile"] })
+);
 
 router.get(
   "/oauth2/redirect/google",

@@ -9,7 +9,7 @@ const Menu = (props) => {
           : "hidden"
       }
     >
-      {props.user.admin ? (
+      {props.user?.admin ? (
         <Link
           onClick={() => {
             props.setMenuOpen(false);

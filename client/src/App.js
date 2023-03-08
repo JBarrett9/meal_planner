@@ -95,7 +95,7 @@ function App() {
             element={<Lists user={user} token={token} />}
           ></Route>
           <Route path="/meal_plan" element={<MealPlan token={token} />}></Route>
-          {user.admin ? (
+          {user?.admin ? (
             <Route
               path="/admin/*"
               element={<Dashboard user={user} token={token} />}
