@@ -116,7 +116,7 @@ const updateUser = async ({ id, ...fields }) => {
 
 const verifyGoogleUser = async (issuer, profile, cb) => {
   await client.query(
-    "SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?",
+    "SELECT * FROM federated_credentials WHERE provider = $1 AND subject = $2",
     [issuer, profile.id],
     function (err, row) {
       if (err) {
@@ -124,7 +124,7 @@ const verifyGoogleUser = async (issuer, profile, cb) => {
       }
       if (!row) {
         client.query(
-          "INSERT INTO users (name) VALUES (?)",
+          "INSERT INTO users (name) VALUES $1",
           [profile.displayName],
           function (err) {
             if (err) {
@@ -133,7 +133,7 @@ const verifyGoogleUser = async (issuer, profile, cb) => {
 
             var id = this.lastID;
             client.query(
-              "INSERT INTO federated_credentials (user_id, provider, subject) VALUES (?, ?, ?)",
+              "INSERT INTO federated_credentials (user_id, provider, subject) VALUES ($1, $2, $3)",
               [id, issuer, profile.id],
               function (err) {
                 if (err) {
@@ -150,7 +150,7 @@ const verifyGoogleUser = async (issuer, profile, cb) => {
         );
       } else {
         client.query(
-          "SELECT * FROM users WHERE id = ?",
+          "SELECT * FROM users WHERE id = $1",
           [row.user_id],
           function (err, row) {
             if (err) {
