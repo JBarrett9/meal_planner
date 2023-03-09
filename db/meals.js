@@ -1,4 +1,4 @@
-const client = require("./client");
+const { client } = require("./client");
 
 /**
  * Adds a new meal to the database and returns a meal object

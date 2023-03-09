@@ -1,9 +1,9 @@
-const client = require("./client");
+const { client } = require("./client");
 
 /**
  * Adds a new account to the database and returns an account object
- * 
- * @param {string} name 
+ *
+ * @param {string} name
  * @returns {{account}}
  */
 const createAccount = async (name) => {

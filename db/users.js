@@ -1,4 +1,4 @@
-const client = require("./client");
+const { client } = require("./client");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 
@@ -115,7 +115,7 @@ const updateUser = async ({ id, ...fields }) => {
 };
 
 const verifyGoogleUser = async (issuer, profile, cb) => {
-  client.query(
+  await client.query(
     "SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?",
     [issuer, profile.id],
     function (err, row) {

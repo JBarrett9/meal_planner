@@ -1,4 +1,4 @@
-const client = require("./client");
+const { client } = require("./client");
 
 const createList = async ({ active, name, accountId, userId, created }) => {
   try {

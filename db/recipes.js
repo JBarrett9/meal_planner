@@ -1,5 +1,5 @@
 const { removeCategoryFromRecipe } = require("./categories");
-const client = require("./client");
+const { client } = require("./client");
 const { removeIngredientFromRecipe } = require("./ingredients");
 
 const addRecipeToMeal = async ({ mealId, recipeId }) => {

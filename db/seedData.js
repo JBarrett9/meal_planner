@@ -1,5 +1,5 @@
 const { createAccount } = require("./accounts");
-const client = require("./client");
+const { client } = require("./client");
 const { EMAIL, USER_PASS } = process.env;
 const {
   createIngredient,
