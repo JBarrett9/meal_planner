@@ -1,6 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Menu = (props) => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <nav
       className={
@@ -63,11 +76,9 @@ const Menu = (props) => {
       </Link>
       <Link
         onClick={() => {
-          props.logout();
           props.setMenuOpen(false);
+          handleLogout();
         }}
-        to="/"
-        className="mt-2"
       >
         Sign Out
       </Link>

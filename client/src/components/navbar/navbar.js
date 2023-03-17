@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import { useWindowSize } from "../../hooks";
 import logo from "../../images/mealplanlogo.png";
 const Navbar = (props) => {
   const size = useWindowSize();
+  const currentUser = useAuth();
 
   return (
     <header
@@ -14,7 +16,7 @@ const Navbar = (props) => {
       <Link className="text-4xl dark:text-slate-200 mt-2 ml-4" to="/">
         <img src={logo} alt="logo" className="w-24" />
       </Link>
-      {props.token ? (
+      {currentUser?.currentUser?.uid ? (
         <button
           className="mr-4 mt-2"
           onClick={() => props.setMenuOpen(!props.menuOpen)}

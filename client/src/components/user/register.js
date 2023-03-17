@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Link, useNavigate } from "react-router-dom";
-import { register } from "../../api/authentication";
-import FormInput from "../inputs/form-input";
+import { useAuth } from "../../contexts/AuthContext";
+import { InputField } from "../inputs";
 
 const Register = (props) => {
   const [name, setName] = useState("");
@@ -10,88 +10,85 @@ const Register = (props) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [recaptchaResponse, setRecaptchaResponse] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-
-  const googleLogin = () => {
-    window.open(
-      "https://my-meal-planet.onrender.com/api/users/login/federated/google",
-      "_self"
-    );
-  };
+  const { register, updateUser } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      return;
+      return setError("Passwords do not match");
     }
-    const response = await register({
-      email,
-      password,
-      name,
-      recaptchaResponse,
-    });
 
-    if (response.success) {
-      localStorage.setItem("jwt", response.token);
-      props.setToken(response.token);
-      props.setUser(response.user);
+    try {
+      setError("");
+      await register(email, password);
       navigate("/");
+    } catch (error) {
+      setError(error);
     }
+
+    setIsLoading(false);
   };
 
   const handleReCAPTCHAChange = async (value) => {
     setRecaptchaResponse(value);
   };
 
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const confirmPasswordRef = useRef(null);
+
   return (
-    <div className="login">
+    <div>
       <form
         onSubmit={(e) => handleSubmit(e)}
-        className="mx-auto flex flex-col w-96 py-1 px-4 mt-8 border-solid border-black border-2 dark:bg-zinc-800 dark:text-white"
+        className="mx-auto flex flex-col w-80 sm:w-96 py-1 px-4 mt-8 border-solid border-black border-2 dark:bg-zinc-800 dark:text-white"
       >
         <h2 className="text-center text-2xl">Create Account</h2>
-        <FormInput
-          label="Name: "
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <FormInput
+        {error ? <div>{error}</div> : ""}
+        <InputField
           label="Email: "
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          ref={emailRef}
         />
-        <FormInput
+        <InputField
           label="Password: "
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          ref={passwordRef}
         />
-        <FormInput
+        <InputField
           label="Confirm Password: "
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          ref={confirmPasswordRef}
         />
-        <span className="flex justify-center mt-4">
+        <span className="flex justify-center mt-4 ">
           <ReCAPTCHA
             sitekey="6LdrVVIkAAAAAMNZ0wwI0WEfLCMaIGVEVdvGhBLB"
             onChange={handleReCAPTCHAChange}
           />
         </span>
-        <button className="mt-4 bg-slate-600 py-2 text-stone-50 text-xl shadow-md shadow-gray-800 hover:shadow-none hover:bg-slate-700">
+        <button
+          disabled={isLoading}
+          className="mt-4 bg-slate-600 py-2 text-stone-50 text-xl shadow-md shadow-gray-800 hover:shadow-none hover:bg-slate-700"
+        >
           Submit
         </button>
         <p className="text-center mt-4 mb-4">
-          Already have an account?
+          Already have an account?{" "}
           <Link
             className="text-teal-900 dark:text-teal-600 font-bold"
             to="/user/login"
           >
             Sign in
           </Link>
-          <Link onClick={googleLogin}>Sign in with Google</Link>
         </p>
       </form>
     </div>

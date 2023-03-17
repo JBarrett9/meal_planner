@@ -1,43 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("jsonwebtoken");
-const passport = require("passport");
-const session = require("express-session");
-const { sessionConfig } = require("../db/client");
+const { verifyToken } = require("./authentication");
 
-const { JWT_SECRET } = process.env;
 router.use(express.json());
 
-router.use(session(sessionConfig));
-
-router.use(passport.initialize());
-router.use(passport.session());
-
-router.use(passport.authenticate("session"));
-
 router.use(async (req, res, next) => {
-  const prefix = "Bearer ";
-  const auth = req.header("Authorization");
-  if (!auth) {
-    next();
-  } else if (auth.startsWith(prefix)) {
-    let token = auth.slice(prefix.length);
+  try {
+    const id = verifyToken(req.body.idToken);
 
-    try {
-      const { id } = jwt.verify(token, JWT_SECRET);
-
-      if (id) {
-        req.user = await getUserById(id);
-        next();
-      }
-    } catch ({ name, message }) {
-      next({ name, message });
+    if (id) {
+      req.user = await getUserById(id);
+      next();
     }
-  } else {
-    next({
-      name: "AuthorizationHeaderError",
-      message: `Authorization token must start with ${prefix}`,
-    });
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
@@ -56,6 +32,7 @@ const listsRouter = require("./lists");
 const mealsRouter = require("./meals");
 const recipesRouter = require("./recipes");
 const usersRouter = require("./users");
+const { verifyToken } = require("./authentication");
 
 router.use("/categories", categoriesRouter);
 router.use("/ingredients", ingredientsRouter);

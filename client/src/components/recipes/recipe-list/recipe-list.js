@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchAccountRecipes } from "../../../api/recipes";
-import { FormInput } from "../../inputs";
+import { InputField } from "../../inputs";
 
 const RecipeList = (props) => {
   const [recipes, setRecipes] = useState([]);
@@ -20,14 +20,17 @@ const RecipeList = (props) => {
     return () => clearTimeout(delay);
   }, [keywords]);
 
+  const searchRef = useRef(null);
+
   return (
     <div className="recipe-list">
       <nav className="w-full px-6 pb-4 mx-auto flex flex-col md:flex-row md:items-center text-center bg-white dark:bg-stone-700 dark:text-stone-50 shadow shadow-black dark:border-none mb-4">
-        <FormInput
+        <InputField
           label="Search: "
           type="text"
           value={keywords}
           onChange={(e) => setKeywords(e.target.value)}
+          ref={searchRef}
         />
       </nav>
       <ul className="sm:w-96 mx-auto">
@@ -42,11 +45,11 @@ const RecipeList = (props) => {
         )}
         {recipes.length > 0 ? (
           recipes.map((recipe) => (
-            <Link key={recipe.id} to={`/recipes/recipe/${recipe.id}`}>
-              <li className="mt-4 text-lg font-semibold border-t border-stone-800 shadow shadow-black bg-purple-400/75 dark:bg-gray-800 dark:text-stone-300 py-2 px-4">
+            <li className="mt-4 text-lg font-semibold border-t border-stone-800 shadow shadow-black bg-purple-400/75 dark:bg-gray-800 dark:text-stone-300 py-2 px-4">
+              <Link key={recipe.id} to={`/recipes/recipe/${recipe.id}`}>
                 {recipe.name}
-              </li>
-            </Link>
+              </Link>
+            </li>
           ))
         ) : (
           <div className="mx-auto w-fit text-lg my-10 text-center">

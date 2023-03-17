@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "firebase": "^9.17.2",
     "google-one-tap": "^1.0.6",
     "passport": "^0.6.0",
     "passport-google-oidc": "^0.1.0",

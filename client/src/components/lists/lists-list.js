@@ -78,11 +78,11 @@ const ListsList = (props) => {
         )}
         {lists.length > 0 ? (
           lists.map((list) => (
-            <Link key={list.id} to={`/lists/list/${list.id}`}>
-              <li className="mt-4 text-lg font-semibold border-t border-stone-800 shadow shadow-black bg-purple-400/75 dark:bg-gray-800 dark:text-stone-300 py-2 px-4">
+            <li className="mt-4 text-lg font-semibold border-t border-stone-800 shadow shadow-black bg-purple-400/75 dark:bg-gray-800 dark:text-stone-300 py-2 px-4">
+              <Link key={list.id} to={`/lists/list/${list.id}`}>
                 {list.name}
-              </li>
-            </Link>
+              </Link>
+            </li>
           ))
         ) : (
           <div className="mx-auto w-fit text-lg my-10 text-center">

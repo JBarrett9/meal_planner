@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { createRecipe } from "../../../api/recipes";
-import { Form, FormInput, FormList } from "../../inputs";
+import { Form, FormList, InputField } from "../../inputs";
 import CategoryQuery from "../../inputs/category-query/category-query";
 import IngredientQuery from "../../inputs/ingredient-query/ingredient-query";
 
@@ -72,19 +72,24 @@ const RecipeForm = (props) => {
     }
   }, []);
 
+  const titleRef = useRef(null);
+  const ReferenceRef = useRef(null);
+
   return (
     <Form title="New Recipe">
-      <FormInput
+      <InputField
         label="Title: "
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
+        inputRef={titleRef}
       />
-      <FormInput
+      <InputField
         label="Reference: "
         type="text"
         value={source}
         onChange={(e) => setSource(e.target.value)}
+        inputRef={ReferenceRef}
       />
       <span className="flex flex-col mt-4">
         <label>Description: </label>

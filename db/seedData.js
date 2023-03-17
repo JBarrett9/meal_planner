@@ -48,9 +48,7 @@ const createTables = async () => {
     console.log("Creating table users ...");
     await client.query(`CREATE TABLE users(
             id SERIAL PRIMARY KEY,
-            name VARCHAR(255),
-            email VARCHAR(255) UNIQUE NOT NULL,
-            password VARCHAR(255) NOT NULL,
+            guid VARCHAR(255), 
             "accountId" INTEGER REFERENCES accounts(id),
             "primaryUser" BOOLEAN,
             admin BOOLEAN DEFAULT false
@@ -379,7 +377,6 @@ const rebuildDB = async () => {
   try {
     await dropTables();
     await createTables();
-    await populate();
   } catch (error) {
     console.error(error);
   }
