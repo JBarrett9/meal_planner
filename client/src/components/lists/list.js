@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { fetchList } from "../../api/lists";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useOutsideClick } from "../../hooks";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../api/firebase";
+import { useAuth } from "../../contexts/AuthContext";
 
 const List = (props) => {
   const [list, setList] = useState({});
@@ -12,11 +14,19 @@ const List = (props) => {
   const [unit, setUnit] = useState("");
   const [displayPrompt, setDisplayPrompt] = useState(false);
   const { listId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getList() {
-      const data = await fetchList({ token: props.token, listId });
-      setList(data);
+      const docRef = doc(db, "lists", listId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setList(docSnap.data());
+      } else {
+        console.log("No such document!");
+        navigate("/lists");
+      }
       setIsLoading(false);
     }
 
@@ -148,10 +158,10 @@ const List = (props) => {
       )}
       <h2 className="text-center text-xl">{list.name}</h2>
       <ul>
-        {list?.ingredients?.length > 0
-          ? list.ingredients.map((ingredient, idx) => (
+        {list?.items?.length > 0
+          ? list.items.map((item, idx) => (
               <li
-                onClick={() => handleCheck(ingredient, idx)}
+                onClick={() => handleCheck(item, idx)}
                 className="flex align-center"
               >
                 {checked.includes(idx) ? (
@@ -163,7 +173,7 @@ const List = (props) => {
                     check_box_outline_blank
                   </span>
                 )}
-                {ingredient.qty} {ingredient.unit} {ingredient.name}
+                {item.qty} {item.unit} {item.name}
               </li>
             ))
           : ""}

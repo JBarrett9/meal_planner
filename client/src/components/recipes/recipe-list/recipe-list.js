@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../../api/firebase";
+import { useAuth } from "../../../contexts/AuthContext";
 import { fetchAccountRecipes } from "../../../api/recipes";
 import { InputField } from "../../inputs";
 
@@ -8,12 +11,21 @@ const RecipeList = (props) => {
   const [keywords, setKeywords] = useState("");
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     const delay = setTimeout(async () => {
-      const data = await fetchAccountRecipes(props.token, keywords, page);
+      const q = query(
+        collection(db, "recipes"),
+        where("creator", "==", currentUser.uid),
+        where("name", ">=", keywords),
+        where("name", "<", keywords + "z")
+      );
+      const querySnapshot = await getDocs(q);
+      setRecipes(
+        querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
       setIsLoading(false);
-      setRecipes(data);
     }, 1000);
 
     setIsLoading(true);
@@ -45,7 +57,10 @@ const RecipeList = (props) => {
         )}
         {recipes.length > 0 ? (
           recipes.map((recipe) => (
-            <li className="mt-4 text-lg font-semibold border-t border-stone-800 shadow shadow-black bg-purple-400/75 dark:bg-gray-800 dark:text-stone-300 py-2 px-4">
+            <li
+              key={recipe.id}
+              className="mt-4 text-lg border-2 dark:border-stone-800 shadow shadow-black bg-white border-purple-800 dark:bg-gray-800 dark:text-stone-300 py-2 px-4"
+            >
               <Link key={recipe.id} to={`/recipes/recipe/${recipe.id}`}>
                 {recipe.name}
               </Link>

@@ -8,6 +8,9 @@ import {
   updatePassword,
   updateEmail,
   updateProfile,
+  signInWithRedirect,
+  GoogleAuthProvider,
+  getRedirectResult,
 } from "firebase/auth";
 import { auth } from "../api/firebase";
 
@@ -20,6 +23,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState({});
   const [loading, setLoading] = useState(true);
+  const provider = new GoogleAuthProvider();
 
   function register(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -31,6 +35,10 @@ export function AuthProvider({ children }) {
 
   function login(email, password) {
     return signInWithEmailAndPassword(auth, email, password);
+  }
+
+  function glogin() {
+    return signInWithRedirect(auth, provider);
   }
 
   function logout() {
@@ -61,6 +69,7 @@ export function AuthProvider({ children }) {
   const value = {
     currentUser,
     login,
+    glogin,
     register,
     updateUser,
     logout,
@@ -70,7 +79,6 @@ export function AuthProvider({ children }) {
     updatePassword,
   };
 
-  console.log(currentUser);
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}

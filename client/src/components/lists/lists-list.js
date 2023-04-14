@@ -1,16 +1,25 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { fetchAccountLists } from "../../api/lists";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../../api/firebase";
+import { useAuth } from "../../contexts/AuthContext";
 
 const ListsList = (props) => {
   const [lists, setLists] = useState([]);
   const [keywords, setKeywords] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     async function getLists() {
-      const data = await fetchAccountLists(props.token);
-      setLists(data);
+      const q = query(
+        collection(db, "lists"),
+        where("creator", "==", currentUser.uid)
+      );
+      const querySnapshot = await getDocs(q);
+      setLists(
+        querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
       setIsLoading(false);
     }
 
@@ -78,7 +87,7 @@ const ListsList = (props) => {
         )}
         {lists.length > 0 ? (
           lists.map((list) => (
-            <li className="mt-4 text-lg font-semibold border-t border-stone-800 shadow shadow-black bg-purple-400/75 dark:bg-gray-800 dark:text-stone-300 py-2 px-4">
+            <li className="mt-4 text-lg border-2 dark:border-stone-800 shadow shadow-black bg-white border-purple-800 dark:bg-gray-800 dark:text-stone-300 py-2 px-4">
               <Link key={list.id} to={`/lists/list/${list.id}`}>
                 {list.name}
               </Link>
@@ -86,10 +95,12 @@ const ListsList = (props) => {
           ))
         ) : (
           <div className="mx-auto w-fit text-lg my-10 text-center">
-            <p className="dark:text-gray-200">No lists found</p>
+            <p className="font-semibold text-orange-300 dark:text-gray-200">
+              No lists found
+            </p>
             <Link
               to="/lists/list_form"
-              className="text-teal-800 hover:text-teal-900 dark:text-teal-400 dark:hover:text-teal-500 font-bold"
+              className="text-stone-100 hover:text-teal-200 dark:text-teal-400 dark:hover:text-teal-500 font-bold"
             >
               Add a list?
             </Link>

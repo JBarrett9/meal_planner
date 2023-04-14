@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 const ListNav = () => {
   return (
-    <nav className="w-full bg-blue-400 shadow shadow-black dark:bg-stone-800 py-4 text-stone-800 font-semibold dark:text-stone-50 flex border-y border-black">
+    <nav className="w-full bg-white border-y-2 border-blue-400 shadow shadow-black dark:bg-stone-800 py-4 text-stone-800 font-semibold dark:text-stone-50 flex dark:border-black">
       <NavLink
         end
         to="/lists"

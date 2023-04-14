@@ -28,7 +28,7 @@ const ForgotPassword = () => {
     <div className="login">
       <form
         onSubmit={(e) => handleSubmit(e)}
-        className="mx-auto flex flex-col w-80 sm:w-96 py-1 px-4 mt-8 border-solid border-black border-2 dark:bg-zinc-800 dark:text-white"
+        className="mx-auto flex flex-col w-80 sm:w-96 py-1 px-4 mt-8 border-solid border-black border-2 bg-stone-100 dark:bg-zinc-800 dark:text-white"
       >
         <h2 className="text-center text-2xl">Sign In</h2>
         {error ? <div>{error}</div> : ""}

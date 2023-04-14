@@ -12,9 +12,15 @@ const InputField = React.forwardRef(
           ref={ref}
           {...otherProps}
           aria-invalid={error ? "true" : undefined}
-          className="grow px-2 border-l border-b border-solid border-black text-md text-black"
+          className={`grow px-2 border-l border-b border-solid border-black text-md text-black ${
+            error && "border border-black outline outline-red-400"
+          }`}
         />
-        {error && <div>⚠️ {error}</div>}
+        {error && (
+          <div className="text-white text-red-500 dark:text-red-400 p-2 text-sm">
+            ⚠️ {error}
+          </div>
+        )}
       </label>
     );
   }

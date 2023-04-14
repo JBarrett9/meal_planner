@@ -4,6 +4,9 @@ import { createRecipe } from "../../../api/recipes";
 import { Form, FormList, InputField } from "../../inputs";
 import CategoryQuery from "../../inputs/category-query/category-query";
 import IngredientQuery from "../../inputs/ingredient-query/ingredient-query";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../../api/firebase";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const RecipeForm = (props) => {
   const [name, setName] = useState("");
@@ -16,6 +19,7 @@ const RecipeForm = (props) => {
   const [makePublic, setMakePublic] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { currentUser } = useAuth();
 
   const addStep = (e) => {
     e.preventDefault();
@@ -41,21 +45,27 @@ const RecipeForm = (props) => {
     setSteps(temp);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const recipe = await createRecipe({
-      token: props.token,
-      name,
-      steps: steps.join("\n"),
-      description,
-      source,
-      pub: makePublic,
-      ingredients,
-      categories,
-    });
+  const recipesCollectionRef = collection(db, "recipes");
 
-    if (recipe.id) {
-      navigate("/recipes");
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const recipe = await addDoc(recipesCollectionRef, {
+        creator: currentUser.uid,
+        name,
+        steps: steps.join("\n"),
+        description,
+        source,
+        makePublic,
+        ingredients,
+        categories,
+      });
+
+      if (recipe.id) {
+        navigate("/recipes");
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -103,9 +113,9 @@ const RecipeForm = (props) => {
         <label>Ingredients: </label>
         <FormList items={ingredients} setItems={setIngredients} />
         <IngredientQuery
-          ingredients={ingredients}
-          setIngredients={setIngredients}
-          token={props.token}
+          submitFunction={(newIngredient) => {
+            setIngredients([...ingredients, newIngredient]);
+          }}
         />
       </span>
       <span className="mt-4">

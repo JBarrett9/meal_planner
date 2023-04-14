@@ -11,18 +11,28 @@ const Register = (props) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [recaptchaResponse, setRecaptchaResponse] = useState("");
   const [error, setError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { register, updateUser } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setConfirmPasswordError("");
+    setError("");
+
+    if (!email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
+      emailRef.current.focus();
+      return setEmailError("Please enter a valid email");
+    }
+
     if (password !== confirmPassword) {
-      return setError("Passwords do not match");
+      confirmPasswordRef.current.focus();
+      return setConfirmPasswordError("Passwords do not match");
     }
 
     try {
-      setError("");
       await register(email, password);
       navigate("/");
     } catch (error) {
@@ -44,13 +54,14 @@ const Register = (props) => {
     <div>
       <form
         onSubmit={(e) => handleSubmit(e)}
-        className="mx-auto flex flex-col w-80 sm:w-96 py-1 px-4 mt-8 border-solid border-black border-2 dark:bg-zinc-800 dark:text-white"
+        className="mx-auto flex flex-col w-80 sm:w-96 py-1 px-4 mt-8 border-solid border-black border-2 bg-stone-100 dark:bg-zinc-800 dark:text-white"
       >
         <h2 className="text-center text-2xl">Create Account</h2>
         {error ? <div>{error}</div> : ""}
         <InputField
           label="Email: "
           type="email"
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           ref={emailRef}
@@ -67,6 +78,7 @@ const Register = (props) => {
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          error={confirmPasswordError}
           ref={confirmPasswordRef}
         />
         <span className="flex justify-center mt-4 ">

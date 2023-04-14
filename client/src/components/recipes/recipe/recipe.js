@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../../api/firebase";
 import { createCategory, getCategoriesByQuery } from "../../../api/categories";
 import { addIngredientToList, fetchAccountLists } from "../../../api/lists";
 import { addRecipeToMeal, createMeal } from "../../../api/meals";
@@ -31,8 +33,15 @@ const Recipe = (props) => {
 
   useEffect(() => {
     async function getRecipe() {
-      const data = await fetchRecipe({ token: props.token, recipeId });
-      setRecipe(data);
+      const docRef = doc(db, "recipes", recipeId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setRecipe(docSnap.data());
+      } else {
+        console.log("No such document!");
+        navigate("/lists");
+      }
     }
 
     getRecipe();

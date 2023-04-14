@@ -3,16 +3,6 @@ import {
   createIngredient,
   getIngredientsByQuery,
 } from "../../../api/ingredients";
-import { useAuth } from "../../../contexts/AuthContext";
-import {
-  addDoc,
-  collection,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
-import { db } from "../../../api/firebase";
 
 const IngredientQuery = (props) => {
   const [queriedIngredients, setQueriedIngredients] = useState([]);
@@ -20,22 +10,12 @@ const IngredientQuery = (props) => {
   const [qty, setQty] = useState("");
   const [unit, setUnit] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const { submitFunction } = props;
-
-  const { currentUser } = useAuth();
 
   useEffect(() => {
     const delay = setTimeout(async () => {
-      const q = query(
-        collection(db, "ingredients"),
-        where("name", ">=", ingredientSearch),
-        where("name", "<", ingredientSearch + "z")
-      );
-      const querySnapshot = await getDocs(q);
-      setQueriedIngredients(
-        querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-      );
+      const ingredients = await getIngredientsByQuery(ingredientSearch);
       setIsLoading(false);
+      setQueriedIngredients(ingredients);
     }, 800);
 
     setIsLoading(true);
@@ -44,22 +24,20 @@ const IngredientQuery = (props) => {
 
   const handleSubmit = (ingredient) => {
     let newIngredient = { qty, unit, ...ingredient };
-    submitFunction(newIngredient);
+    props.setIngredients([...props.ingredients, newIngredient]);
     setIngredientSearch("");
     setQty("");
     setUnit("");
   };
 
-  const ingredientsCollectionRef = collection(db, "ingredients");
-
   const addNewIngredient = async (e) => {
     e.preventDefault();
-    const docRef = await addDoc(ingredientsCollectionRef, {
-      user: currentUser.uid,
+    const newIngredient = await createIngredient({
+      token: props.token,
       name: ingredientSearch,
     });
-    const newIngredient = await getDoc(docRef);
-    handleSubmit(newIngredient.data());
+    console.log(newIngredient);
+    handleSubmit(newIngredient);
   };
 
   return (

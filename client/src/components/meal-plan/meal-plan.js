@@ -8,23 +8,34 @@ import {
 import { fetchAccountRecipes } from "../../api/recipes";
 import { useOutsideClick } from "../../hooks";
 import MealDisplay from "./meal-display";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../api/firebase";
+import { useAuth } from "../../contexts/AuthContext";
 
 const MealPlan = (props) => {
   const [displayForm, setDisplayForm] = useState(false);
   const [meals, setMeals] = useState([]);
   const today = new Date();
   const [weekday, setWeekday] = useState(today.toDateString());
-  const [search, setSearch] = useState("");
+  const [keywords, setKeywords] = useState("");
   const [date, setDate] = useState({});
   const [recipes, setRecipes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentMeal, setCurrentMeal] = useState([]);
   const [mealDisplay, setMealDisplay] = useState(false);
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     async function getMeals() {
-      const data = await fetchAccountMeals(props.token);
-      setMeals(data);
+      const q = query(
+        collection(db, "meals"),
+        where("creator", "==", currentUser.uid)
+      );
+      const querySnapshot = await getDocs(q);
+      setMeals(
+        querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
+      setIsLoading(false);
     }
 
     getMeals();
@@ -32,24 +43,30 @@ const MealPlan = (props) => {
 
   useEffect(() => {
     const delay = setTimeout(async () => {
-      const data = await fetchAccountRecipes(props.token, search, 1);
+      const q = query(
+        collection(db, "recipes"),
+        where("creator", "==", currentUser.uid),
+        where("name", ">=", keywords),
+        where("name", "<", keywords + "z")
+      );
+      const querySnapshot = await getDocs(q);
+      setRecipes(
+        querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
       setIsLoading(false);
-      setRecipes(data);
     }, 1000);
 
     setIsLoading(true);
     return () => clearTimeout(delay);
-  }, [search]);
+  }, [keywords]);
 
+  const mealsCollectionRef = collection(db, "meals");
   const handleRecipeSelect = async (recipe) => {
-    const meal = await createMeal({ token: props.token, date, time: 1 });
-    const mealRecipe = await addRecipeToMeal({
-      token: props.token,
-      mealId: meal.id,
-      recipeId: recipe.id,
+    const docRef = await addDoc(mealsCollectionRef, {
+      creator: currentUser.uid,
+      ...recipe,
+      date,
     });
-    const data = await fetchAccountMeals(props.token);
-    setMeals(data);
     setDisplayForm(false);
   };
 
@@ -60,6 +77,8 @@ const MealPlan = (props) => {
   });
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  console.log(meals);
 
   const wrapperRef = useRef(null);
   const wrapperRef2 = useRef(null);
@@ -78,8 +97,8 @@ const MealPlan = (props) => {
               <label className="mr-2">Search: </label>
               <input
                 type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={keywords}
+                onChange={(e) => setKeywords(e.target.value)}
                 className="border border-black focus:shadow-md focus:shadow-black"
               />
             </span>
